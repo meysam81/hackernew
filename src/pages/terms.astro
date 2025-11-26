@@ -1,0 +1,166 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terms of Service | HackerNew" description="Terms of service for HackerNew">
+  <div class="legal-page">
+    <h1 class="page-title">Terms of Service</h1>
+    <p class="last-updated">Last updated: November 2024</p>
+
+    <section class="legal-section">
+      <h2>About HackerNew</h2>
+      <p>
+        HackerNew is an open-source project that provides an alternative interface for browsing
+        <a href="https://news.ycombinator.com" target="_blank" rel="noopener noreferrer">Hacker News</a>.
+        By using this service, you agree to these terms.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Open Source</h2>
+      <p>
+        HackerNew is released under the
+        <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache License 2.0</a>.
+        The source code is available on
+        <a href="https://github.com/meysam81/hackernew" target="_blank" rel="noopener noreferrer">GitHub</a>.
+      </p>
+      <p>
+        You are free to use, modify, and distribute the code in accordance with the license terms.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Content Disclaimer</h2>
+      <p>
+        All stories, comments, and user-generated content displayed on HackerNew are sourced from
+        <a href="https://news.ycombinator.com" target="_blank" rel="noopener noreferrer">Hacker News</a>,
+        which is operated by Y Combinator.
+      </p>
+      <p>
+        HackerNew does not own, control, or take responsibility for this content. The original
+        content belongs to its respective authors and is subject to Hacker News'
+        <a href="https://www.ycombinator.com/legal#tou" target="_blank" rel="noopener noreferrer">terms of use</a>
+        and
+        <a href="https://news.ycombinator.com/newsguidelines.html" target="_blank" rel="noopener noreferrer">guidelines</a>.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>No Warranty</h2>
+      <p>
+        This service is provided "as is" without warranty of any kind, express or implied.
+        The maintainers of HackerNew make no guarantees regarding:
+      </p>
+      <ul>
+        <li>Availability or uptime of the service</li>
+        <li>Accuracy or completeness of displayed content</li>
+        <li>Fitness for any particular purpose</li>
+        <li>Security of user data (though we take reasonable precautions)</li>
+      </ul>
+    </section>
+
+    <section class="legal-section">
+      <h2>Limitation of Liability</h2>
+      <p>
+        The HackerNew project maintainers shall not be liable for any damages arising from
+        the use or inability to use this service, including but not limited to direct,
+        indirect, incidental, or consequential damages.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Acceptable Use</h2>
+      <p>When using HackerNew, you agree not to:</p>
+      <ul>
+        <li>Attempt to disrupt or overload the service</li>
+        <li>Use automated tools to scrape content excessively</li>
+        <li>Circumvent any security measures</li>
+        <li>Use the service for any illegal purpose</li>
+      </ul>
+    </section>
+
+    <section class="legal-section">
+      <h2>Accounts</h2>
+      <p>
+        Account creation is optional. If you choose to create an account via GitHub or Google
+        authentication, you are responsible for maintaining the security of your account.
+      </p>
+      <p>
+        We reserve the right to terminate accounts that violate these terms or abuse the service.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Changes to Terms</h2>
+      <p>
+        We may update these terms from time to time. Continued use of the service after changes
+        constitutes acceptance of the new terms.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Contact</h2>
+      <p>
+        For questions about these terms, please open an issue on our
+        <a href="https://github.com/meysam81/hackernew/issues" target="_blank" rel="noopener noreferrer">GitHub repository</a>.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 640px;
+  }
+
+  .page-title {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-2);
+  }
+
+  .last-updated {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    margin: 0 0 var(--spacing-8);
+  }
+
+  .legal-section {
+    margin-bottom: var(--spacing-8);
+  }
+
+  .legal-section h2 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-3);
+  }
+
+  .legal-section p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-3);
+  }
+
+  .legal-section ul {
+    margin: 0 0 var(--spacing-3);
+    padding-left: var(--spacing-6);
+    color: var(--text-secondary);
+  }
+
+  .legal-section li {
+    margin-bottom: var(--spacing-2);
+    line-height: 1.6;
+  }
+
+  .legal-section a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .legal-section a:hover {
+    text-decoration: underline;
+  }
+</style>
