@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1270 760" width="1270" height="760">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#09090B"/>
+      <stop offset="100%" style="stop-color:#18181B"/>
+    </linearGradient>
+    <linearGradient id="accent2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F97316"/>
+      <stop offset="100%" style="stop-color:#FB923C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1270" height="760" fill="url(#bgGrad2)"/>
+
+  <!-- Title -->
+  <text x="635" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" fill="#FAFAFA" text-anchor="middle">
+    Light &amp; Dark. Your choice.
+  </text>
+  <text x="635" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#71717A" text-anchor="middle">
+    Follows your system preference, or toggle manually anytime
+  </text>
+
+  <!-- Light mode mockup -->
+  <g transform="translate(60, 140)">
+    <!-- Label -->
+    <g transform="translate(240, -30)">
+      <circle cx="0" cy="10" r="8" fill="#FEF3C7"/>
+      <circle cx="0" cy="10" r="4" fill="#F59E0B"/>
+      <text x="20" y="14" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#FAFAFA">Light Mode</text>
+    </g>
+
+    <!-- Window -->
+    <rect width="540" height="480" rx="12" fill="#E4E4E7"/>
+    <rect width="540" height="36" rx="12" fill="#E4E4E7"/>
+    <rect y="24" width="540" height="12" fill="#E4E4E7"/>
+
+    <!-- Traffic lights -->
+    <circle cx="18" cy="18" r="5" fill="#EF4444"/>
+    <circle cx="36" cy="18" r="5" fill="#EAB308"/>
+    <circle cx="54" cy="18" r="5" fill="#22C55E"/>
+
+    <!-- Content -->
+    <rect y="36" width="540" height="444" fill="#FAFAFA"/>
+
+    <!-- Header -->
+    <rect y="36" width="540" height="48" fill="#FFFFFF"/>
+
+    <!-- Logo -->
+    <g transform="translate(16, 46)">
+      <rect width="28" height="28" rx="5" fill="url(#accent2)"/>
+      <g fill="#FFFFFF">
+        <rect x="7" y="7" width="3" height="14" rx="1"/>
+        <rect x="18" y="7" width="3" height="14" rx="1"/>
+        <rect x="7" y="12" width="14" height="3" rx="1"/>
+      </g>
+    </g>
+    <text x="54" y="66" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#18181B">HackerNew</text>
+
+    <!-- Nav -->
+    <g font-family="system-ui, sans-serif" font-size="12" fill="#71717A">
+      <text x="140" y="66">top</text>
+      <text x="175" y="66">new</text>
+      <text x="210" y="66">ask</text>
+    </g>
+
+    <!-- Story items -->
+    <g transform="translate(30, 110)">
+      <g transform="translate(0, 0)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.3"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#18181B">Show HN: Modern reimagining of HN</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">342 pts | hackernew.dev | 127 comments</text>
+      </g>
+
+      <g transform="translate(0, 55)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.3"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#18181B">Why we're switching from React to Astro</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">256 pts | blog.company.io | 89 comments</text>
+      </g>
+
+      <g transform="translate(0, 110)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.3"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#18181B">The case for server-side rendering</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">198 pts | dev.to | 67 comments</text>
+      </g>
+
+      <g transform="translate(0, 165)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.3"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#18181B">Bun 2.0: Even faster JavaScript</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">445 pts | bun.sh | 203 comments</text>
+      </g>
+
+      <g transform="translate(0, 220)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.3"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#18181B">Ask HN: Favorite open source project?</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">312 pts | 458 comments</text>
+      </g>
+
+      <g transform="translate(0, 275)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.3"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#18181B">Tailwind CSS v4 is now stable</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">567 pts | tailwindcss.com | 234 comments</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Dark mode mockup -->
+  <g transform="translate(670, 140)">
+    <!-- Label -->
+    <g transform="translate(240, -30)">
+      <circle cx="0" cy="10" r="8" fill="#1E293B"/>
+      <circle cx="0" cy="10" r="4" fill="#94A3B8"/>
+      <text x="20" y="14" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#FAFAFA">Dark Mode</text>
+    </g>
+
+    <!-- Window -->
+    <rect width="540" height="480" rx="12" fill="#27272A"/>
+    <rect width="540" height="36" rx="12" fill="#27272A"/>
+    <rect y="24" width="540" height="12" fill="#27272A"/>
+
+    <!-- Traffic lights -->
+    <circle cx="18" cy="18" r="5" fill="#EF4444"/>
+    <circle cx="36" cy="18" r="5" fill="#EAB308"/>
+    <circle cx="54" cy="18" r="5" fill="#22C55E"/>
+
+    <!-- Content -->
+    <rect y="36" width="540" height="444" fill="#09090B"/>
+
+    <!-- Header -->
+    <rect y="36" width="540" height="48" fill="#18181B"/>
+
+    <!-- Logo -->
+    <g transform="translate(16, 46)">
+      <rect width="28" height="28" rx="5" fill="url(#accent2)"/>
+      <g fill="#FFFFFF">
+        <rect x="7" y="7" width="3" height="14" rx="1"/>
+        <rect x="18" y="7" width="3" height="14" rx="1"/>
+        <rect x="7" y="12" width="14" height="3" rx="1"/>
+      </g>
+    </g>
+    <text x="54" y="66" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#FAFAFA">HackerNew</text>
+
+    <!-- Nav -->
+    <g font-family="system-ui, sans-serif" font-size="12" fill="#A1A1AA">
+      <text x="140" y="66">top</text>
+      <text x="175" y="66">new</text>
+      <text x="210" y="66">ask</text>
+    </g>
+
+    <!-- Story items -->
+    <g transform="translate(30, 110)">
+      <g transform="translate(0, 0)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.5"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#FAFAFA">Show HN: Modern reimagining of HN</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">342 pts | hackernew.dev | 127 comments</text>
+      </g>
+
+      <g transform="translate(0, 55)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.5"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#FAFAFA">Why we're switching from React to Astro</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">256 pts | blog.company.io | 89 comments</text>
+      </g>
+
+      <g transform="translate(0, 110)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.5"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#FAFAFA">The case for server-side rendering</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">198 pts | dev.to | 67 comments</text>
+      </g>
+
+      <g transform="translate(0, 165)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.5"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#FAFAFA">Bun 2.0: Even faster JavaScript</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">445 pts | bun.sh | 203 comments</text>
+      </g>
+
+      <g transform="translate(0, 220)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.5"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#FAFAFA">Ask HN: Favorite open source project?</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">312 pts | 458 comments</text>
+      </g>
+
+      <g transform="translate(0, 275)">
+        <circle cx="0" cy="8" r="3" fill="#F97316" opacity="0.5"/>
+        <text x="15" y="12" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#FAFAFA">Tailwind CSS v4 is now stable</text>
+        <text x="15" y="28" font-family="system-ui, sans-serif" font-size="10" fill="#71717A">567 pts | tailwindcss.com | 234 comments</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="635" y="680" font-family="system-ui, sans-serif" font-size="14" fill="#71717A" text-anchor="middle">
+    Easy on the eyes, day or night
+  </text>
+</svg>

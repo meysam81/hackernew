@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1270 760" width="1270" height="760">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#09090B"/>
+      <stop offset="100%" style="stop-color:#18181B"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F97316"/>
+      <stop offset="100%" style="stop-color:#FB923C"/>
+    </linearGradient>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1F1F23"/>
+      <stop offset="100%" style="stop-color:#18181B"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="40" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1270" height="760" fill="url(#bgGrad)"/>
+
+  <!-- Subtle radial glow -->
+  <ellipse cx="635" cy="380" rx="500" ry="300" fill="#F97316" opacity="0.04"/>
+
+  <!-- Browser mockup -->
+  <g transform="translate(135, 80)">
+    <!-- Window frame -->
+    <rect width="1000" height="600" rx="12" fill="#27272A"/>
+
+    <!-- Title bar -->
+    <rect width="1000" height="40" rx="12" fill="#27272A"/>
+    <rect y="28" width="1000" height="12" fill="#27272A"/>
+
+    <!-- Traffic lights -->
+    <circle cx="20" cy="20" r="6" fill="#EF4444"/>
+    <circle cx="40" cy="20" r="6" fill="#EAB308"/>
+    <circle cx="60" cy="20" r="6" fill="#22C55E"/>
+
+    <!-- URL bar -->
+    <rect x="200" y="10" width="600" height="20" rx="4" fill="#18181B"/>
+    <text x="500" y="24" font-family="ui-monospace, monospace" font-size="11" fill="#71717A" text-anchor="middle">hackernew.dev</text>
+
+    <!-- Content area -->
+    <rect y="40" width="1000" height="560" fill="#09090B"/>
+
+    <!-- Header -->
+    <rect y="40" width="1000" height="56" fill="#18181B"/>
+
+    <!-- Logo in header -->
+    <g transform="translate(20, 52)">
+      <rect width="32" height="32" rx="6" fill="url(#accent)"/>
+      <g fill="#FFFFFF">
+        <rect x="8" y="8" width="4" height="16" rx="1"/>
+        <rect x="20" y="8" width="4" height="16" rx="1"/>
+        <rect x="8" y="14" width="16" height="4" rx="1"/>
+      </g>
+    </g>
+
+    <!-- Nav items -->
+    <text x="70" y="74" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#FAFAFA">HackerNew</text>
+
+    <g font-family="system-ui, sans-serif" font-size="13" fill="#A1A1AA">
+      <text x="180" y="74">top</text>
+      <text x="220" y="74">new</text>
+      <text x="260" y="74">ask</text>
+      <text x="300" y="74">show</text>
+      <text x="350" y="74">jobs</text>
+    </g>
+
+    <!-- Theme toggle -->
+    <circle cx="950" cy="68" r="14" fill="#27272A"/>
+    <circle cx="950" cy="68" r="6" fill="#F97316"/>
+
+    <!-- Story list -->
+    <g transform="translate(200, 130)">
+      <!-- Story 1 -->
+      <g transform="translate(0, 0)">
+        <text x="0" y="0" font-family="system-ui, sans-serif" font-size="15" font-weight="500" fill="#FAFAFA">Show HN: A modern reimagining of Hacker News</text>
+        <text x="0" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#71717A">342 points by meysam81 | 2 hours ago | 127 comments</text>
+        <text x="0" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#F97316">hackernew.dev</text>
+        <text x="95" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#71717A">| 342 points | 127 comments</text>
+      </g>
+
+      <!-- Story 2 -->
+      <g transform="translate(0, 70)">
+        <text x="0" y="0" font-family="system-ui, sans-serif" font-size="15" font-weight="500" fill="#FAFAFA">Why we're switching from React to Astro</text>
+        <text x="0" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#F97316">blog.company.io</text>
+        <text x="95" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#71717A">| 256 points | 89 comments</text>
+      </g>
+
+      <!-- Story 3 -->
+      <g transform="translate(0, 140)">
+        <text x="0" y="0" font-family="system-ui, sans-serif" font-size="15" font-weight="500" fill="#FAFAFA">The case for server-side rendering in 2025</text>
+        <text x="0" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#F97316">dev.to</text>
+        <text x="50" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#71717A">| 198 points | 67 comments</text>
+      </g>
+
+      <!-- Story 4 -->
+      <g transform="translate(0, 210)">
+        <text x="0" y="0" font-family="system-ui, sans-serif" font-size="15" font-weight="500" fill="#FAFAFA">Bun 2.0: The JavaScript runtime gets even faster</text>
+        <text x="0" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#F97316">bun.sh</text>
+        <text x="50" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#71717A">| 445 points | 203 comments</text>
+      </g>
+
+      <!-- Story 5 -->
+      <g transform="translate(0, 280)">
+        <text x="0" y="0" font-family="system-ui, sans-serif" font-size="15" font-weight="500" fill="#FAFAFA">Ask HN: What's your favorite open source project?</text>
+        <text x="0" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#71717A">312 points | 458 comments</text>
+      </g>
+
+      <!-- Story 6 -->
+      <g transform="translate(0, 350)">
+        <text x="0" y="0" font-family="system-ui, sans-serif" font-size="15" font-weight="500" fill="#FAFAFA">Tailwind CSS v4 is now stable</text>
+        <text x="0" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#F97316">tailwindcss.com</text>
+        <text x="100" y="24" font-family="system-ui, sans-serif" font-size="12" fill="#71717A">| 567 points | 234 comments</text>
+      </g>
+    </g>
+
+    <!-- Keyboard shortcut hint -->
+    <g transform="translate(850, 550)">
+      <rect width="120" height="30" rx="6" fill="#27272A" opacity="0.9"/>
+      <text x="60" y="20" font-family="ui-monospace, monospace" font-size="11" fill="#71717A" text-anchor="middle">j/k to navigate</text>
+    </g>
+  </g>
+
+  <!-- Tagline badge -->
+  <g transform="translate(485, 700)">
+    <rect width="300" height="36" rx="18" fill="#27272A"/>
+    <text x="150" y="24" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#FAFAFA" text-anchor="middle">What if HN was built today?</text>
+  </g>
+</svg>
