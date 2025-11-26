@@ -12,9 +12,9 @@
 
 <p align="center">
   <a href="https://hackernew.dev">Live Demo</a> &bull;
-  <a href="#-quick-start">Quick Start</a> &bull;
-  <a href="#-features">Features</a> &bull;
-  <a href="#-contributing">Contributing</a>
+  <a href="#quick-start">Quick Start</a> &bull;
+  <a href="#features">Features</a> &bull;
+  <a href="#contributing">Contributing</a>
 </p>
 
 <p align="center">
