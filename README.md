@@ -1,162 +1,305 @@
-# HackerNew
+<p align="center">
+  <img src="assets/logo.svg" alt="HackerNew Logo" width="120" height="120">
+</p>
 
-A modern, aesthetically refined reimagining of Hacker News. We use HN every day and wondered what it might feel like with modern tooling. Here's our take.
+<h1 align="center">HackerNew</h1>
 
-![HackerNew Screenshot](./docs/screenshot.png)
+<p align="center">
+  <strong>What if HN was built today?</strong>
+  <br>
+  A modern, open-source reimagining of Hacker News
+</p>
 
-## Features
+<p align="center">
+  <a href="https://hackernew.dev">Live Demo</a> &bull;
+  <a href="#quick-start">Quick Start</a> &bull;
+  <a href="#features">Features</a> &bull;
+  <a href="#contributing">Contributing</a>
+</p>
 
-- **Modern Design** — Clean, minimal interface inspired by Linear, Vercel, and Raycast
-- **Dark/Light Mode** — System detection with manual toggle
-- **Density Options** — Comfortable or compact view modes
-- **Keyboard Navigation** — `j`/`k` to navigate, `o` to open, `c` for comments, `b` to bookmark
-- **Bookmarks** — Save stories locally or sync with your account
-- **Reading History** — Track what you've already read
-- **Fast & Static** — Pre-rendered pages with client-side data fetching
+<p align="center">
+  <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome">
+  <img src="https://img.shields.io/badge/Astro-4.16-BC52EE.svg" alt="Astro">
+  <img src="https://img.shields.io/badge/Vue-3.5-4FC08D.svg" alt="Vue">
+  <img src="https://img.shields.io/badge/Tailwind-4.0-06B6D4.svg" alt="Tailwind">
+</p>
 
-## Stack
+---
 
-- **[Astro](https://astro.build)** — Static site generation
-- **[Vue.js](https://vuejs.org)** — Interactive components (islands architecture)
-- **[Tailwind CSS v4](https://tailwindcss.com)** — Styling
-- **[Supabase](https://supabase.com)** — Authentication & database
-- **[Ky](https://github.com/sindresorhus/ky)** — HTTP client
-- **[Lucide](https://lucide.dev)** — Icons
+We use Hacker News every single day. It's one of the best communities on the internet.
 
-## Getting Started
+This project is a **love letter** to that community — a "what if" exploration of what HN might feel like if it were built with a modern 2025 stack. We're not here to replace it or critique it. Just to imagine, learn, and share.
 
-### Prerequisites
+<p align="center">
+  <img src="assets/screenshots/hero-dark.png" alt="HackerNew Screenshot" width="800">
+</p>
 
-- [Bun](https://bun.sh) (latest)
-- [Supabase](https://supabase.com) account (optional, for auth features)
+## Why?
 
-### Installation
+- **To learn** — Building real projects is the best way to learn modern web development
+- **To explore** — What does "modern" actually mean for a content-focused site?
+- **To share** — Maybe some ideas here spark inspiration for others
+
+HackerNew is intentionally minimal. No algorithmic feeds. No engagement hacking. Just content, presented cleanly.
+
+---
+
+## Quick Start
+
+Three commands. That's it.
 
 ```bash
-# Clone the repository
-git clone https://github.com/meysam81/hackernew.git
-cd hackernew
+# 1. Clone
+git clone https://github.com/meysam81/hackernew.git && cd hackernew
 
-# Install dependencies
+# 2. Install (requires Bun - see below if needed)
 bun install
 
-# Start development server
+# 3. Run
 bun dev
 ```
 
-The app will be available at `http://localhost:4321/hackernew/`
+Open [localhost:4321/hackernew](http://localhost:4321/hackernew/) and you're in.
 
-### Configuration
-
-Create a `.env` file based on `.env.example`:
-
-```bash
-cp .env.example .env
-```
-
-For auth features, add your Supabase credentials:
+<details>
+<summary><strong>Don't have Bun?</strong></summary>
 
 ```bash
-PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+# macOS / Linux
+curl -fsSL https://bun.sh/install | bash
+
+# Windows
+powershell -c "irm bun.sh/install.ps1 | iex"
+
+# Or via npm
+npm install -g bun
 ```
 
-### Supabase Setup
+</details>
 
-1. Create a new Supabase project
-2. Run the SQL from `supabase/schema.sql` to create tables
-3. Enable GitHub and/or Google OAuth in Authentication > Providers
-4. Add your site URL to Authentication > URL Configuration
+---
 
-### Building
+## Features
 
-```bash
-# Type check and build
-bun run build
+### For Readers
 
-# Preview production build
-bun run preview
+| Feature | Description |
+|---------|-------------|
+| **Dark/Light Mode** | Respects system preference, toggle anytime |
+| **Keyboard Navigation** | `j`/`k` to move, `o` to open, `c` for comments |
+| **Bookmarks** | Save stories for later (syncs with account) |
+| **Reading History** | Keep track of what you've read |
+| **Density Toggle** | Comfortable or compact view |
+
+### For Developers
+
+| Feature | Description |
+|---------|-------------|
+| **Island Architecture** | Static pages, hydrated components |
+| **Type-Safe** | Full TypeScript throughout |
+| **Modern CSS** | Tailwind v4 with design tokens |
+| **Auth Ready** | Supabase OAuth (GitHub/Google) |
+| **Zero Config Deploy** | Works on any static host |
+
+### Keyboard Shortcuts
+
 ```
+j / k       Navigate stories
+o           Open story link
+c           Open comments
+b           Toggle bookmark
+Esc         Go back
+```
+
+---
+
+## Tech Stack
+
+We picked tools we enjoy using:
+
+- **[Astro](https://astro.build)** — Fast by default, islands architecture
+- **[Vue 3](https://vuejs.org)** — Reactive components with Composition API
+- **[Tailwind CSS v4](https://tailwindcss.com)** — Utility-first styling
+- **[Supabase](https://supabase.com)** — Auth + Postgres (optional)
+- **[Bun](https://bun.sh)** — Fast runtime and package manager
+
+The official [Hacker News API](https://github.com/HackerNews/API) powers all the content.
+
+---
 
 ## Project Structure
 
 ```
 src/
 ├── components/
-│   ├── auth/         # Auth components (AuthButton, AuthCallback)
-│   ├── bookmarks/    # Bookmarks list
-│   ├── comment/      # Comment thread components
-│   ├── layout/       # Header, Footer
-│   ├── story/        # Story feed and detail components
-│   ├── ui/           # Base UI components (Button, Skeleton)
-│   └── user/         # User profile components
-├── composables/      # Vue composables (useAuth, useTheme, etc.)
-├── layouts/          # Astro layouts
-├── lib/              # Utilities, API clients
-├── pages/            # Astro pages (routes)
-└── styles/           # Global CSS with design tokens
+│   ├── auth/           # Login, user menu
+│   ├── story/          # Feed, items, details
+│   ├── comment/        # Threaded comments
+│   └── ui/             # Buttons, skeletons
+├── composables/        # Shared Vue logic
+│   ├── useAuth.ts
+│   ├── useTheme.ts
+│   ├── useBookmarks.ts
+│   └── useKeyboard.ts
+├── lib/
+│   ├── hn-client.ts    # HN API with caching
+│   └── supabase.ts     # Auth client
+├── pages/              # File-based routes
+│   ├── index.astro     # Top stories
+│   ├── new.astro       # New stories
+│   ├── ask.astro       # Ask HN
+│   ├── show.astro      # Show HN
+│   └── item/[id].astro # Story details
+└── styles/
+    └── global.css      # Design tokens
 ```
-
-## Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| `j` | Next story |
-| `k` | Previous story |
-| `o` | Open story link |
-| `c` | Open comments |
-| `b` | Toggle bookmark |
-| `Esc` | Go back |
-
-## Design Tokens
-
-The design system is defined in `src/styles/global.css`:
-
-- **Colors** — Semantic tokens for light/dark mode
-- **Typography** — Inter (body) + JetBrains Mono (code)
-- **Spacing** — 4px base unit
-- **Shadows** — Subtle depth for cards and modals
-
-## Deployment
-
-### GitHub Pages
-
-The project includes a GitHub Actions workflow that automatically deploys to GitHub Pages on push to `main`.
-
-1. Enable GitHub Pages in your repository settings
-2. Set the source to "GitHub Actions"
-3. Add these secrets in Settings > Secrets:
-   - `PUBLIC_SUPABASE_URL` (optional)
-   - `PUBLIC_SUPABASE_ANON_KEY` (optional)
-
-### Other Platforms
-
-Build the static site and deploy the `dist` folder:
-
-```bash
-bun run build
-# Deploy dist/ to any static hosting
-```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Hacker News](https://news.ycombinator.com) for the inspiration and API
-- [HN API Documentation](https://github.com/HackerNews/API)
 
 ---
 
-Built with love for the HN community.
+## Configuration
+
+### Basic Setup (No Auth)
+
+Works out of the box! Just `bun dev` and go.
+
+### With Authentication
+
+Want bookmarks that sync across devices? Set up Supabase:
+
+1. **Create a project** at [supabase.com](https://supabase.com)
+
+2. **Run the schema** — Copy `supabase/schema.sql` into the SQL Editor
+
+3. **Enable OAuth** — In Authentication → Providers, enable GitHub and/or Google
+
+4. **Add your credentials**:
+   ```bash
+   cp .env.example .env
+   ```
+
+   ```env
+   PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
+
+5. **Configure URLs** — In Authentication → URL Configuration:
+   - Site URL: `http://localhost:4321/hackernew`
+   - Redirect URLs: `http://localhost:4321/hackernew/auth/callback`
+
+---
+
+## Deployment
+
+### GitHub Pages (Automatic)
+
+Push to `main` and the included GitHub Action handles it:
+
+1. Go to Settings → Pages
+2. Set Source to "GitHub Actions"
+3. (Optional) Add secrets for auth: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`
+
+### Any Static Host
+
+```bash
+bun run build
+# Upload dist/ to Vercel, Netlify, Cloudflare Pages, anywhere
+```
+
+### Custom Domain
+
+Update `astro.config.mjs`:
+
+```js
+export default defineConfig({
+  site: 'https://your-domain.com',
+  base: '/', // Remove /hackernew if using root domain
+  // ...
+});
+```
+
+---
+
+## Contributing
+
+We'd love your help! Here's how to get started:
+
+1. **Fork** the repo
+2. **Create** a branch: `git checkout -b my-feature`
+3. **Make** your changes
+4. **Test** locally with `bun dev`
+5. **Push** and open a PR
+
+### Ideas for Contributions
+
+- [ ] RSS feed generation
+- [ ] Offline support (PWA)
+- [ ] Story sharing cards
+- [ ] Comment collapse persistence
+- [ ] Search functionality
+- [ ] i18n support
+
+Not sure where to start? Look for issues labeled `good first issue`.
+
+---
+
+## Design Philosophy
+
+HackerNew follows a few principles:
+
+1. **Content first** — UI should enhance reading, not distract
+2. **Speed matters** — Static generation + minimal JS = fast loads
+3. **Respect preferences** — Dark mode, density, keyboard users
+4. **Progressive enhancement** — Works without JS, better with it
+
+The design takes cues from tools we admire: Linear's clarity, Vercel's simplicity, Raycast's keyboard-first approach.
+
+---
+
+## FAQ
+
+<details>
+<summary><strong>Why not just use the official HN site?</strong></summary>
+
+You should! The official site is great and we use it daily. This is just a learning project and design exploration.
+</details>
+
+<details>
+<summary><strong>Will this replace my HN workflow?</strong></summary>
+
+Probably not, and that's okay. It's meant for exploring what's possible, not replacing what works.
+</details>
+
+<details>
+<summary><strong>Can I deploy my own instance?</strong></summary>
+
+Absolutely! That's the whole point. Fork it, customize it, make it yours.
+</details>
+
+<details>
+<summary><strong>Why Bun instead of npm/yarn/pnpm?</strong></summary>
+
+Speed, mostly. But the project works with any package manager — just replace `bun` with your preferred tool.
+</details>
+
+---
+
+## Acknowledgments
+
+- **[Hacker News](https://news.ycombinator.com)** — For 18+ years of thoughtful discussion
+- **[HN API](https://github.com/HackerNews/API)** — For making this possible
+- **Everyone who reads HN** — You're what makes the community great
+
+---
+
+## License
+
+[Apache 2.0](LICENSE) — Use it, learn from it, build on it.
+
+---
+
+<p align="center">
+  <sub>Built with care for the HN community</sub>
+  <br>
+  <a href="https://hackernew.dev">hackernew.dev</a>
+</p>
