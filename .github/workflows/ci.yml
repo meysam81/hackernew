@@ -40,8 +40,8 @@ jobs:
         with:
           name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}
           path: dist
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
+        name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         with:
           artifact_name: github-actions-${{ github.run_id }}-${{ github.run_attempt }}
