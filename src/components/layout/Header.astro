@@ -1,0 +1,217 @@
+---
+const navItems = [
+  { href: '/', label: 'Top' },
+  { href: '/new', label: 'New' },
+  { href: '/ask', label: 'Ask' },
+  { href: '/show', label: 'Show' },
+  { href: '/jobs', label: 'Jobs' },
+];
+
+const currentPath = Astro.url.pathname;
+const basePath = import.meta.env.BASE_URL || '/';
+---
+
+<header class="header">
+  <div class="header-inner">
+    <a href={basePath} class="logo">
+      <span class="logo-text">HackerNew</span>
+    </a>
+
+    <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+      <svg class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg class="close-icon hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        {navItems.map((item) => {
+          const href = item.href === '/' ? basePath : `${basePath}${item.href.slice(1)}`;
+          const isActive = currentPath === href ||
+            (item.href !== '/' && currentPath.startsWith(href));
+          return (
+            <li>
+              <a
+                href={href}
+                class:list={['nav-link', { active: isActive }]}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <slot name="actions" />
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 56px;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-default);
+    backdrop-filter: blur(8px);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--spacing-4);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--text-lg);
+    color: var(--text-primary);
+    transition: color var(--transition-fast);
+  }
+
+  .logo:hover {
+    color: var(--accent);
+  }
+
+  .logo-text {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    padding: var(--spacing-2);
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
+  }
+
+  .mobile-menu-btn:hover {
+    background-color: var(--bg-tertiary);
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-list {
+    display: flex;
+    gap: var(--spacing-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    display: block;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
+  }
+
+  .nav-link.active {
+    color: var(--accent);
+    background-color: var(--accent-muted);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  @media (max-width: 640px) {
+    .mobile-menu-btn {
+      display: flex;
+    }
+
+    .nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-default);
+      padding: var(--spacing-2);
+    }
+
+    .nav.open {
+      display: block;
+    }
+
+    .nav-list {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .nav-link {
+      padding: var(--spacing-3) var(--spacing-4);
+    }
+
+    .header-actions {
+      display: none;
+    }
+
+    .header-actions.open {
+      display: flex;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      padding: var(--spacing-4);
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-default);
+    }
+  }
+</style>
+
+<script>
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const nav = document.querySelector('.nav');
+  const menuIcon = document.querySelector('.menu-icon');
+  const closeIcon = document.querySelector('.close-icon');
+
+  menuBtn?.addEventListener('click', () => {
+    const isOpen = nav?.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(isOpen));
+    menuIcon?.classList.toggle('hidden');
+    closeIcon?.classList.toggle('hidden');
+  });
+</script>

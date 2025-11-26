@@ -1,0 +1,92 @@
+---
+// Footer component
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="https://github.com/meysam81/hackernew" target="_blank" rel="noopener noreferrer">
+        GitHub
+      </a>
+      <span class="separator">·</span>
+      <a href="https://news.ycombinator.com/newsguidelines.html" target="_blank" rel="noopener noreferrer">
+        Guidelines
+      </a>
+      <span class="separator">·</span>
+      <a href="https://news.ycombinator.com" target="_blank" rel="noopener noreferrer">
+        Hacker News
+      </a>
+    </div>
+    <p class="footer-text">
+      Built with
+      <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>
+      +
+      <a href="https://vuejs.org" target="_blank" rel="noopener noreferrer">Vue</a>
+      +
+      <a href="https://supabase.com" target="_blank" rel="noopener noreferrer">Supabase</a>
+    </p>
+    <p class="footer-license">
+      Apache-2.0 License
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: auto;
+    padding: var(--spacing-8) var(--spacing-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .footer-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-4);
+    font-size: var(--text-sm);
+  }
+
+  .footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .footer-links a:hover {
+    color: var(--accent);
+  }
+
+  .separator {
+    color: var(--text-tertiary);
+  }
+
+  .footer-text {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    margin: 0 0 var(--spacing-2);
+  }
+
+  .footer-text a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .footer-text a:hover {
+    color: var(--accent);
+  }
+
+  .footer-license {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    margin: 0;
+    font-family: var(--font-mono);
+  }
+</style>
