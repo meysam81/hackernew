@@ -1,0 +1,89 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import HeaderActions from '../components/ui/HeaderActions.vue';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A modern reimagining of Hacker News' } = Astro.props;
+const basePath = import.meta.env.BASE_URL || '/';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F97316" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={`${basePath}og-image.png`} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
+    <link rel="canonical" href={Astro.url.href} />
+
+    <title>{title}</title>
+
+    <!-- Prevent flash of wrong theme -->
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('hackernew-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = theme === 'dark' || (theme !== 'light' && prefersDark);
+        if (isDark) document.documentElement.classList.add('dark');
+
+        const density = localStorage.getItem('hackernew-density') || '"comfortable"';
+        const densityValue = JSON.parse(density);
+        document.documentElement.classList.add(`density-${densityValue}`);
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <Header>
+        <HeaderActions slot="actions" client:load />
+      </Header>
+
+      <main class="main-content">
+        <slot />
+      </main>
+
+      <Footer />
+    </div>
+  </body>
+</html>
+
+<style>
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .main-content {
+    flex: 1;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--spacing-4);
+  }
+
+  @media (min-width: 1024px) {
+    .main-content {
+      padding: var(--spacing-6);
+    }
+  }
+</style>

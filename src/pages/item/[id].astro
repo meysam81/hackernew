@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StoryDetail from '../../components/story/StoryDetail.vue';
+
+export function getStaticPaths() {
+  // For static generation, we'll handle this dynamically on client side
+  // This allows the page to work with any story ID
+  return [{ params: { id: 'placeholder' } }];
+}
+
+const { id } = Astro.params;
+---
+
+<BaseLayout title="Story | HackerNew">
+  <StoryDetail client:load storyId={id} />
+</BaseLayout>

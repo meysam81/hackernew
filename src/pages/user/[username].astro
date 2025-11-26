@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import UserProfile from '../../components/user/UserProfile.vue';
+
+export function getStaticPaths() {
+  return [{ params: { username: 'placeholder' } }];
+}
+
+const { username } = Astro.params;
+---
+
+<BaseLayout title="User Profile | HackerNew">
+  <UserProfile client:load username={username} />
+</BaseLayout>
