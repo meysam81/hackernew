@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy | HackerNew" description="Privacy policy for HackerNew">
+  <div class="legal-page">
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="last-updated">Last updated: November 2024</p>
+
+    <section class="legal-section">
+      <h2>Overview</h2>
+      <p>
+        HackerNew is an open-source project that provides a modern interface for browsing Hacker News.
+        We are committed to protecting your privacy and being transparent about what data we collect.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Data We Collect</h2>
+
+      <h3>Local Storage (Browser Only)</h3>
+      <p>By default, HackerNew stores the following data locally in your browser:</p>
+      <ul>
+        <li><strong>Theme preference</strong> - Your light/dark mode setting</li>
+        <li><strong>Display density</strong> - Your comfortable/compact view preference</li>
+        <li><strong>Bookmarks</strong> - Stories you've saved (stored locally unless you sign in)</li>
+        <li><strong>Read history</strong> - Stories you've viewed (stored locally unless you sign in)</li>
+      </ul>
+      <p>This data never leaves your device unless you choose to sign in.</p>
+
+      <h3>Account Data (Optional)</h3>
+      <p>If you choose to sign in with GitHub or Google, we store:</p>
+      <ul>
+        <li><strong>User ID</strong> - A unique identifier from your OAuth provider</li>
+        <li><strong>Email address</strong> - For account identification</li>
+        <li><strong>Profile information</strong> - Username and basic profile data</li>
+        <li><strong>Synced bookmarks</strong> - Your saved stories</li>
+        <li><strong>Synced read history</strong> - Stories you've viewed</li>
+      </ul>
+      <p>Account data is stored securely using <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">Supabase</a>.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Third-Party Services</h2>
+      <ul>
+        <li>
+          <strong>Hacker News API</strong> - We fetch public content from the official
+          <a href="https://github.com/HackerNews/API" target="_blank" rel="noopener noreferrer">Hacker News API</a>.
+          No personal data is sent to this service.
+        </li>
+        <li>
+          <strong>Supabase</strong> - If you sign in, authentication and data storage is handled by Supabase.
+          See their <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a>.
+        </li>
+        <li>
+          <strong>GitHub/Google OAuth</strong> - If you sign in, these providers handle authentication.
+          Review their respective privacy policies.
+        </li>
+      </ul>
+    </section>
+
+    <section class="legal-section">
+      <h2>What We Don't Do</h2>
+      <ul>
+        <li>We don't use cookies for tracking</li>
+        <li>We don't use analytics or tracking scripts</li>
+        <li>We don't sell or share your data with third parties</li>
+        <li>We don't serve advertisements</li>
+      </ul>
+    </section>
+
+    <section class="legal-section">
+      <h2>Data Deletion</h2>
+      <p>
+        <strong>Local data:</strong> Clear your browser's local storage or use your browser's
+        "Clear site data" feature.
+      </p>
+      <p>
+        <strong>Account data:</strong> Sign out and contact us via GitHub to request account deletion.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Changes to This Policy</h2>
+      <p>
+        We may update this policy from time to time. Changes will be reflected on this page
+        with an updated revision date.
+      </p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Contact</h2>
+      <p>
+        For privacy concerns or questions, please open an issue on our
+        <a href="https://github.com/meysam81/hackernew/issues" target="_blank" rel="noopener noreferrer">GitHub repository</a>.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 640px;
+  }
+
+  .page-title {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-2);
+  }
+
+  .last-updated {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    margin: 0 0 var(--spacing-8);
+  }
+
+  .legal-section {
+    margin-bottom: var(--spacing-8);
+  }
+
+  .legal-section h2 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-3);
+  }
+
+  .legal-section h3 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--spacing-4) 0 var(--spacing-2);
+  }
+
+  .legal-section p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-3);
+  }
+
+  .legal-section ul {
+    margin: 0 0 var(--spacing-3);
+    padding-left: var(--spacing-6);
+    color: var(--text-secondary);
+  }
+
+  .legal-section li {
+    margin-bottom: var(--spacing-2);
+    line-height: 1.6;
+  }
+
+  .legal-section strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .legal-section a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .legal-section a:hover {
+    text-decoration: underline;
+  }
+</style>
