@@ -8,7 +8,7 @@
     "@fontsource-variable/jetbrains-mono": "^5.1.1",
     "@supabase/supabase-js": "^2.47.10",
     "@tailwindcss/vite": "^4.0.0-beta.8",
-    "astro": "^4.16.18",
+    "astro": "^5.16.1",
     "ky": "^1.7.2",
     "loglevel": "^1.9.2",
     "lucide-vue-next": "^0.460.0",
