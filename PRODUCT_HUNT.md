@@ -7,21 +7,25 @@ Everything you need to submit HackerNew to Product Hunt.
 ## Basic Information
 
 ### Product Name
+
 ```
 HackerNew
 ```
 
 ### Tagline (60 characters max)
+
 ```
 What if Hacker News was built today?
 ```
 
 ### Website
+
 ```
 https://hackernew.dev
 ```
 
 ### GitHub Repository
+
 ```
 https://github.com/meysam81/hackernew
 ```
@@ -31,6 +35,7 @@ https://github.com/meysam81/hackernew
 ## Description
 
 ### Short Description (260 characters)
+
 ```
 A modern, open-source reimagining of Hacker News. Built with Astro, Vue 3, and Tailwind CSS. Features dark mode, vim-style keyboard shortcuts, bookmarks, reading history, and a clean minimal interface. A love letter to the HN community.
 ```
@@ -77,6 +82,7 @@ Would love to hear what you think! What features would you add? What would you d
 ## Topics/Categories
 
 Select these topics on Product Hunt:
+
 - Developer Tools
 - Open Source
 - News
@@ -89,13 +95,13 @@ Select these topics on Product Hunt:
 
 Upload these in order:
 
-| Order | File | Description |
-|-------|------|-------------|
-| 1 | `assets/producthunt/gallery-1-hero.svg` | Main interface showing the clean feed design |
-| 2 | `assets/producthunt/gallery-2-dark-light.svg` | Side-by-side dark and light mode comparison |
-| 3 | `assets/producthunt/gallery-3-keyboard.svg` | Keyboard shortcuts showcase |
-| 4 | `assets/producthunt/gallery-4-techstack.svg` | Modern tech stack overview |
-| 5 | `assets/producthunt/gallery-5-features.svg` | Feature grid showing all capabilities |
+| Order | File                                          | Description                                  |
+| ----- | --------------------------------------------- | -------------------------------------------- |
+| 1     | `assets/producthunt/gallery-1-hero.svg`       | Main interface showing the clean feed design |
+| 2     | `assets/producthunt/gallery-2-dark-light.svg` | Side-by-side dark and light mode comparison  |
+| 3     | `assets/producthunt/gallery-3-keyboard.svg`   | Keyboard shortcuts showcase                  |
+| 4     | `assets/producthunt/gallery-4-techstack.svg`  | Modern tech stack overview                   |
+| 5     | `assets/producthunt/gallery-5-features.svg`   | Feature grid showing all capabilities        |
 
 **Thumbnail (600x600):** Use `assets/logo.svg` or create a square crop from the hero image.
 
@@ -170,6 +176,7 @@ No, this is an independent open source project. We use the official, public HN A
 ## Social Media Copy
 
 ### Twitter/X
+
 ```
 What if Hacker News was built today?
 
@@ -186,6 +193,7 @@ A love letter to the HN community. 🧡
 ```
 
 ### LinkedIn
+
 ```
 Excited to share a side project: HackerNew
 
@@ -212,6 +220,7 @@ Would love to hear what you think!
 ```
 
 ### Mastodon/Threads
+
 ```
 Built a thing: HackerNew
 
@@ -252,4 +261,4 @@ Apache 2.0 licensed
 
 ---
 
-*Good luck with the launch!*
+_Good luck with the launch!_

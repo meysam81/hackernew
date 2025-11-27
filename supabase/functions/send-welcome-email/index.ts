@@ -1,45 +1,48 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const SENDER_API_KEY = Deno.env.get('SENDER_API_KEY');
+const SENDER_API_KEY = Deno.env.get("SENDER_API_KEY");
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
 
 serve(async (req) => {
   // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
     const { email, name } = await req.json();
 
     if (!email) {
-      throw new Error('Email is required');
+      throw new Error("Email is required");
     }
 
     if (!SENDER_API_KEY) {
-      console.log('Sender API key not configured, skipping email');
       return new Response(
-        JSON.stringify({ success: true, message: 'Email skipped (no API key)' }),
+        JSON.stringify({
+          success: true,
+          message: "Email skipped (no API key)",
+        }),
         {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
-    const response = await fetch('https://api.sender.net/v2/emails', {
-      method: 'POST',
+    const response = await fetch("https://api.sender.net/v2/emails", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${SENDER_API_KEY}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${SENDER_API_KEY}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: { email: 'hello@hackernew.dev', name: 'HackerNew' },
-        to: [{ email, name: name || email.split('@')[0] }],
-        subject: 'Welcome to HackerNew! 🎉',
+        from: { email: "hello@hackernew.dev", name: "HackerNew" },
+        to: [{ email, name: name || email.split("@")[0] }],
+        subject: "Welcome to HackerNew! 🎉",
         html: `
 <!DOCTYPE html>
 <html>
@@ -52,7 +55,7 @@ serve(async (req) => {
     <h1 style="color: #F97316; margin: 0;">HackerNew</h1>
   </div>
 
-  <p>Hey ${name || 'there'}! 👋</p>
+  <p>Hey ${name || "there"}! 👋</p>
 
   <p>Welcome to HackerNew — a modern reimagining of Hacker News.</p>
 
@@ -86,20 +89,16 @@ serve(async (req) => {
       throw new Error(`Failed to send email: ${error}`);
     }
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error) {
-    console.error('Error sending welcome email:', error);
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
       {
         status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
     );
   }
 });

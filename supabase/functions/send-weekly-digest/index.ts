@@ -1,13 +1,14 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const SENDER_API_KEY = Deno.env.get('SENDER_API_KEY');
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+const SENDER_API_KEY = Deno.env.get("SENDER_API_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
 
 interface Bookmark {
@@ -17,6 +18,7 @@ interface Bookmark {
   created_at: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface Profile {
   id: string;
   username: string;
@@ -24,20 +26,22 @@ interface Profile {
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error('Supabase credentials not configured');
+      throw new Error("Supabase credentials not configured");
     }
 
     if (!SENDER_API_KEY) {
-      console.log('Sender API key not configured, skipping digest');
       return new Response(
-        JSON.stringify({ success: true, message: 'Digest skipped (no API key)' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({
+          success: true,
+          message: "Digest skipped (no API key)",
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
@@ -45,16 +49,21 @@ serve(async (req) => {
 
     // Get users who have email digest enabled
     const { data: profiles, error: profilesError } = await supabase
-      .from('profiles')
-      .select('id, username, email_digest')
-      .eq('email_digest', true);
+      .from("profiles")
+      .select("id, username, email_digest")
+      .eq("email_digest", true);
 
-    if (profilesError) throw profilesError;
+    if (profilesError) {
+      throw profilesError;
+    }
 
     if (!profiles || profiles.length === 0) {
       return new Response(
-        JSON.stringify({ success: true, message: 'No users with digest enabled' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({
+          success: true,
+          message: "No users with digest enabled",
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
@@ -66,42 +75,56 @@ serve(async (req) => {
 
     for (const profile of profiles) {
       // Get user's email from auth
-      const { data: { user }, error: userError } = await supabase.auth.admin.getUserById(profile.id);
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.admin.getUserById(profile.id);
 
-      if (userError || !user?.email) continue;
+      if (userError || !user?.email) {
+        continue;
+      }
 
       // Get recent bookmarks
       const { data: bookmarks, error: bookmarksError } = await supabase
-        .from('bookmarks')
-        .select('story_id, story_title, story_url, created_at')
-        .eq('user_id', profile.id)
-        .gte('created_at', oneWeekAgo.toISOString())
-        .order('created_at', { ascending: false })
+        .from("bookmarks")
+        .select("story_id, story_title, story_url, created_at")
+        .eq("user_id", profile.id)
+        .gte("created_at", oneWeekAgo.toISOString())
+        .order("created_at", { ascending: false })
         .limit(10);
 
-      if (bookmarksError || !bookmarks || bookmarks.length === 0) continue;
+      if (bookmarksError || !bookmarks || bookmarks.length === 0) {
+        continue;
+      }
 
       // Generate email content
       const bookmarksList = bookmarks
-        .map((b: Bookmark) => `
+        .map(
+          (b: Bookmark) => `
           <li style="margin-bottom: 12px;">
             <a href="${b.story_url || `https://meysam81.github.io/hackernew/item/${b.story_id}`}" style="color: #F97316; text-decoration: none;">
               ${b.story_title}
             </a>
           </li>
-        `)
-        .join('');
+        `,
+        )
+        .join("");
 
       // Send email
-      const response = await fetch('https://api.sender.net/v2/emails', {
-        method: 'POST',
+      const response = await fetch("https://api.sender.net/v2/emails", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${SENDER_API_KEY}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${SENDER_API_KEY}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: { email: 'digest@hackernew.dev', name: 'HackerNew' },
-          to: [{ email: user.email, name: profile.username || user.email.split('@')[0] }],
+          from: { email: "digest@hackernew.dev", name: "HackerNew" },
+          to: [
+            {
+              email: user.email,
+              name: profile.username || user.email.split("@")[0],
+            },
+          ],
           subject: `Your Weekly HackerNew Digest 📚`,
           html: `
 <!DOCTYPE html>
@@ -116,7 +139,7 @@ serve(async (req) => {
     <p style="color: #71717A; margin: 8px 0 0;">Weekly Digest</p>
   </div>
 
-  <p>Hey ${profile.username || 'there'}! 👋</p>
+  <p>Hey ${profile.username || "there"}! 👋</p>
 
   <p>Here are the stories you bookmarked this week:</p>
 
@@ -143,18 +166,16 @@ serve(async (req) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({ success: true, emailsSent }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ success: true, emailsSent }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error) {
-    console.error('Error sending weekly digest:', error);
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
       {
         status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
     );
   }
 });

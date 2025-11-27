@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import type { HNComment } from '@/lib/hn-client';
-import { getCommentTree } from '@/lib/hn-client';
-import CommentItem from './CommentItem.vue';
-import CommentSkeleton from './CommentSkeleton.vue';
+import { ref, onMounted, computed } from "vue";
+import type { HNComment } from "@/lib/hn-client";
+import { getCommentTree } from "@/lib/hn-client";
+import CommentItem from "./CommentItem.vue";
+import CommentSkeleton from "./CommentSkeleton.vue";
 
 interface CommentWithReplies extends HNComment {
   replies: CommentWithReplies[];
@@ -40,10 +40,11 @@ const fetchComments = async () => {
   try {
     loading.value = true;
     error.value = null;
-    comments.value = await getCommentTree(props.commentIds) as CommentWithReplies[];
+    comments.value = (await getCommentTree(
+      props.commentIds,
+    )) as CommentWithReplies[];
   } catch (err) {
-    console.error('Error fetching comments:', err);
-    error.value = 'Failed to load comments.';
+    error.value = "Failed to load comments.";
   } finally {
     loading.value = false;
   }

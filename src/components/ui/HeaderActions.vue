@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useTheme } from '@/composables/useTheme';
-import { useDensity } from '@/composables/useDensity';
-import { useAuth } from '@/composables/useAuth';
-import { Sun, Moon, Rows3, Rows4, User, LogOut } from 'lucide-vue-next';
+import { useTheme } from "@/composables/useTheme";
+import { useDensity } from "@/composables/useDensity";
+import { useAuth } from "@/composables/useAuth";
+import { Sun, Moon, Rows3, Rows4, User, LogOut } from "lucide-vue-next";
 
 const { resolvedTheme, toggleTheme } = useTheme();
 const { density, toggleDensity } = useDensity();
 const { user, loading, signOut, isConfigured } = useAuth();
 
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 const handleSignOut = async () => {
   await signOut();
@@ -21,7 +21,11 @@ const handleSignOut = async () => {
     <!-- Density Toggle -->
     <button
       class="icon-btn"
-      :title="density === 'comfortable' ? 'Switch to compact view' : 'Switch to comfortable view'"
+      :title="
+        density === 'comfortable'
+          ? 'Switch to compact view'
+          : 'Switch to comfortable view'
+      "
       @click="toggleDensity"
     >
       <Rows3 v-if="density === 'comfortable'" :size="18" />
@@ -31,7 +35,11 @@ const handleSignOut = async () => {
     <!-- Theme Toggle -->
     <button
       class="icon-btn"
-      :title="resolvedTheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
+      :title="
+        resolvedTheme === 'light'
+          ? 'Switch to dark mode'
+          : 'Switch to light mode'
+      "
       @click="toggleTheme"
     >
       <Moon v-if="resolvedTheme === 'light'" :size="18" />
@@ -45,7 +53,10 @@ const handleSignOut = async () => {
       </template>
       <template v-else-if="user">
         <div class="user-menu">
-          <a :href="`${basePath}user/${user.user_metadata?.user_name || user.id}`" class="icon-btn">
+          <a
+            :href="`${basePath}user/${user.user_metadata?.user_name || user.id}`"
+            class="icon-btn"
+          >
             <User :size="18" />
           </a>
           <button class="icon-btn" title="Sign out" @click="handleSignOut">
@@ -54,9 +65,7 @@ const handleSignOut = async () => {
         </div>
       </template>
       <template v-else>
-        <a :href="`${basePath}auth/signin`" class="auth-btn">
-          Sign in
-        </a>
+        <a :href="`${basePath}auth/signin`" class="auth-btn"> Sign in </a>
       </template>
     </template>
   </div>
@@ -81,7 +90,9 @@ const handleSignOut = async () => {
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   cursor: pointer;
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
   text-decoration: none;
 }
 
@@ -129,7 +140,12 @@ const handleSignOut = async () => {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 </style>

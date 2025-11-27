@@ -6,8 +6,8 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  width: '100%',
-  height: '1rem',
+  width: "100%",
+  height: "1rem",
   rounded: false,
 });
 </script>

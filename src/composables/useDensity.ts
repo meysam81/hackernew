@@ -1,12 +1,12 @@
-import { ref, watch, onMounted } from 'vue';
-import { getLocalStorage, setLocalStorage } from '@/lib/utils';
+import { ref, watch, onMounted } from "vue";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils";
 
-export type Density = 'comfortable' | 'compact';
+export type Density = "comfortable" | "compact";
 
-const STORAGE_KEY = 'hackernew-density';
+const STORAGE_KEY = "hackernew-density";
 
 // Shared state across components
-const density = ref<Density>('comfortable');
+const density = ref<Density>("comfortable");
 
 export function useDensity() {
   const setDensity = (newDensity: Density) => {
@@ -16,21 +16,29 @@ export function useDensity() {
   };
 
   const toggleDensity = () => {
-    const newDensity = density.value === 'comfortable' ? 'compact' : 'comfortable';
+    const newDensity =
+      density.value === "comfortable" ? "compact" : "comfortable";
     setDensity(newDensity);
   };
 
   const applyDensity = () => {
-    if (typeof document === 'undefined') return;
+    if (typeof document === "undefined") {
+      return;
+    }
 
-    document.documentElement.classList.remove('density-comfortable', 'density-compact');
+    document.documentElement.classList.remove(
+      "density-comfortable",
+      "density-compact",
+    );
     document.documentElement.classList.add(`density-${density.value}`);
   };
 
   const initDensity = () => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") {
+      return;
+    }
 
-    const stored = getLocalStorage<Density>(STORAGE_KEY, 'comfortable');
+    const stored = getLocalStorage<Density>(STORAGE_KEY, "comfortable");
     density.value = stored;
     applyDensity();
   };

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { X, CheckCircle, AlertCircle, Info } from 'lucide-vue-next';
+import { ref, watch } from "vue";
+import { X, CheckCircle, AlertCircle, Info } from "lucide-vue-next";
 
 interface Toast {
   id: string;
-  type: 'success' | 'error' | 'info';
+  type: "success" | "error" | "info";
   message: string;
 }
 
 const toasts = ref<Toast[]>([]);
 
-const addToast = (type: Toast['type'], message: string, duration = 3000) => {
+const addToast = (type: Toast["type"], message: string, duration = 3000) => {
   const id = Math.random().toString(36).substring(2, 9);
   toasts.value.push({ id, type, message });
 
@@ -48,7 +48,11 @@ const icons = {
         >
           <component :is="icons[toast.type]" :size="18" class="toast-icon" />
           <span class="toast-message">{{ toast.message }}</span>
-          <button class="toast-close" @click="removeToast(toast.id)" aria-label="Dismiss">
+          <button
+            class="toast-close"
+            @click="removeToast(toast.id)"
+            aria-label="Dismiss"
+          >
             <X :size="16" />
           </button>
         </div>

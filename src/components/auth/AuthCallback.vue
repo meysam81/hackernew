@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { ref, onMounted } from "vue";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
-const status = ref<'loading' | 'success' | 'error'>('loading');
-const errorMessage = ref('');
+const status = ref<"loading" | "success" | "error">("loading");
+const errorMessage = ref("");
 
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 onMounted(async () => {
   if (!isSupabaseConfigured()) {
-    status.value = 'error';
-    errorMessage.value = 'Authentication is not configured.';
+    status.value = "error";
+    errorMessage.value = "Authentication is not configured.";
     return;
   }
 
@@ -23,26 +23,26 @@ onMounted(async () => {
     }
 
     if (data.session) {
-      status.value = 'success';
+      status.value = "success";
 
       // Check if we need to create a profile
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', data.session.user.id)
+        .from("profiles")
+        .select("id")
+        .eq("id", data.session.user.id)
         .single();
 
       if (!profile) {
         // Create profile for new user
-        const { error: profileError } = await supabase.from('profiles').insert({
+        const { error: profileError } = await supabase.from("profiles").insert({
           id: data.session.user.id,
-          username: data.session.user.user_metadata?.user_name ||
-                    data.session.user.email?.split('@')[0] ||
-                    null,
+          username:
+            data.session.user.user_metadata?.user_name ||
+            data.session.user.email?.split("@")[0] ||
+            null,
         });
 
         if (profileError) {
-          console.error('Error creating profile:', profileError);
         }
       }
 
@@ -55,9 +55,9 @@ onMounted(async () => {
       window.location.href = `${basePath}auth/signin`;
     }
   } catch (err) {
-    console.error('Auth callback error:', err);
-    status.value = 'error';
-    errorMessage.value = err instanceof Error ? err.message : 'An error occurred during sign in.';
+    status.value = "error";
+    errorMessage.value =
+      err instanceof Error ? err.message : "An error occurred during sign in.";
   }
 });
 </script>
@@ -83,9 +83,7 @@ onMounted(async () => {
         <div class="error-icon">!</div>
         <p>Sign in failed</p>
         <p class="error-message">{{ errorMessage }}</p>
-        <a :href="`${basePath}auth/signin`" class="retry-link">
-          Try again
-        </a>
+        <a :href="`${basePath}auth/signin`" class="retry-link"> Try again </a>
       </div>
     </div>
   </div>

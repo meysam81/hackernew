@@ -35,6 +35,9 @@ const basePath = import.meta.env.BASE_URL || '/';
     <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
     <link rel="canonical" href={Astro.url.href} />
 
+    <link rel="dns-prefetch" href="https://analytics.hackernew.dev" />
+    <link rel="preconnect" href="https://analytics.hackernew.dev" crossorigin />
+
     <title>{title}</title>
 
     <!-- Prevent flash of wrong theme -->
@@ -43,7 +46,7 @@ const basePath = import.meta.env.BASE_URL || '/';
         const theme = localStorage.getItem('hackernew-theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const isDark = theme === 'dark' || (theme !== 'light' && prefersDark);
-        if (isDark) document.documentElement.classList.add('dark');
+        if (isDark) {document.documentElement.classList.add('dark');}
 
         const density = localStorage.getItem('hackernew-density') || '"comfortable"';
         const densityValue = JSON.parse(density);
@@ -63,6 +66,13 @@ const basePath = import.meta.env.BASE_URL || '/';
 
       <Footer />
     </div>
+
+    <script defer src="https://analytics.hackernew.dev/pa.js"
+    id="pianjs"
+    data-code="66Al4zzfEZ3zOeB3B5TjoRxwnK4NQBVy"
+    data-hit-endpoint="https://analytics.hackernew.dev/hit"
+    data-event-endpoint="https://analytics.hackernew.dev/event"
+    data-session-endpoint="https://analytics.hackernew.dev/session"></script>
   </body>
 </html>
 

@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { ExternalLink, ArrowLeft, Bookmark, BookmarkCheck, Share2 } from 'lucide-vue-next';
-import type { HNStory } from '@/lib/hn-client';
-import { getStory, getDomain, getHNUrl } from '@/lib/hn-client';
-import { timeAgo, formatDate, pluralize, sanitizeHtml } from '@/lib/utils';
-import { useBookmarks } from '@/composables/useBookmarks';
-import { useReadHistory } from '@/composables/useReadHistory';
-import CommentThread from '../comment/CommentThread.vue';
-import Skeleton from '../ui/Skeleton.vue';
+import { ref, computed, onMounted } from "vue";
+import {
+  ExternalLink,
+  ArrowLeft,
+  Bookmark,
+  BookmarkCheck,
+  Share2,
+} from "lucide-vue-next";
+import type { HNStory } from "@/lib/hn-client";
+import { getStory, getDomain, getHNUrl } from "@/lib/hn-client";
+import { timeAgo, formatDate, pluralize, sanitizeHtml } from "@/lib/utils";
+import { useBookmarks } from "@/composables/useBookmarks";
+import { useReadHistory } from "@/composables/useReadHistory";
+import CommentThread from "../comment/CommentThread.vue";
+import Skeleton from "../ui/Skeleton.vue";
 
 interface Props {
   storyId: string;
@@ -22,29 +28,37 @@ const error = ref<string | null>(null);
 const { isBookmarked, toggleBookmark } = useBookmarks();
 const { markAsRead } = useReadHistory();
 
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 // Get the actual story ID from URL if we're on a placeholder page
 const actualStoryId = computed(() => {
-  if (props.storyId === 'placeholder' && typeof window !== 'undefined') {
-    const pathParts = window.location.pathname.split('/');
-    const idIndex = pathParts.indexOf('item') + 1;
+  if (props.storyId === "placeholder" && typeof window !== "undefined") {
+    const pathParts = window.location.pathname.split("/");
+    const idIndex = pathParts.indexOf("item") + 1;
     return pathParts[idIndex] || null;
   }
   return props.storyId;
 });
 
-const domain = computed(() => story.value ? getDomain(story.value.url) : '');
-const timeAgoStr = computed(() => story.value ? timeAgo(story.value.time) : '');
-const formattedDate = computed(() => story.value ? formatDate(story.value.time) : '');
-const hnUrl = computed(() => story.value ? getHNUrl(story.value.id) : '');
-const isStoryBookmarked = computed(() => story.value ? isBookmarked(story.value.id) : false);
-const storyText = computed(() => story.value?.text ? sanitizeHtml(story.value.text) : '');
+const domain = computed(() => (story.value ? getDomain(story.value.url) : ""));
+const timeAgoStr = computed(() =>
+  story.value ? timeAgo(story.value.time) : "",
+);
+const formattedDate = computed(() =>
+  story.value ? formatDate(story.value.time) : "",
+);
+const hnUrl = computed(() => (story.value ? getHNUrl(story.value.id) : ""));
+const isStoryBookmarked = computed(() =>
+  story.value ? isBookmarked(story.value.id) : false,
+);
+const storyText = computed(() =>
+  story.value?.text ? sanitizeHtml(story.value.text) : "",
+);
 
 const fetchStory = async () => {
   const id = actualStoryId.value;
   if (!id) {
-    error.value = 'Invalid story ID';
+    error.value = "Invalid story ID";
     loading.value = false;
     return;
   }
@@ -55,14 +69,13 @@ const fetchStory = async () => {
 
     const data = await getStory(parseInt(id, 10));
     if (!data) {
-      throw new Error('Story not found');
+      throw new Error("Story not found");
     }
 
     story.value = data;
     markAsRead(data.id);
   } catch (err) {
-    console.error('Error fetching story:', err);
-    error.value = 'Failed to load story.';
+    error.value = "Failed to load story.";
   } finally {
     loading.value = false;
   }
@@ -125,11 +138,18 @@ onMounted(() => {
         <h1 class="story-title">{{ story.title }}</h1>
 
         <div class="story-meta">
-          <span class="story-score">{{ story.score }} {{ story.score === 1 ? 'point' : 'points' }}</span>
+          <span class="story-score"
+            >{{ story.score }}
+            {{ story.score === 1 ? "point" : "points" }}</span
+          >
           <span class="meta-sep">·</span>
-          <a :href="`${basePath}user/${story.by}`" class="story-author">{{ story.by }}</a>
+          <a :href="`${basePath}user/${story.by}`" class="story-author">{{
+            story.by
+          }}</a>
           <span class="meta-sep">·</span>
-          <span class="story-time" :title="formattedDate">{{ timeAgoStr }}</span>
+          <span class="story-time" :title="formattedDate">{{
+            timeAgoStr
+          }}</span>
           <template v-if="domain">
             <span class="meta-sep">·</span>
             <span class="story-domain">{{ domain }}</span>
@@ -148,18 +168,23 @@ onMounted(() => {
             Read article
           </a>
 
-          <a :href="hnUrl" class="action-btn" target="_blank" rel="noopener noreferrer">
+          <a
+            :href="hnUrl"
+            class="action-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             View on HN
           </a>
 
           <button
             class="action-btn"
-            :class="{ 'bookmarked': isStoryBookmarked }"
+            :class="{ bookmarked: isStoryBookmarked }"
             @click="handleBookmark"
           >
             <BookmarkCheck v-if="isStoryBookmarked" :size="16" />
             <Bookmark v-else :size="16" />
-            {{ isStoryBookmarked ? 'Saved' : 'Save' }}
+            {{ isStoryBookmarked ? "Saved" : "Save" }}
           </button>
 
           <button class="action-btn" @click="handleShare">

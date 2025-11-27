@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { Bookmark, Trash2, ExternalLink } from 'lucide-vue-next';
-import { useBookmarks } from '@/composables/useBookmarks';
-import { timeAgo } from '@/lib/utils';
+import { computed } from "vue";
+import { Bookmark, Trash2, ExternalLink } from "lucide-vue-next";
+import { useBookmarks } from "@/composables/useBookmarks";
+import { timeAgo } from "@/lib/utils";
 
 const { bookmarkList, loading, removeBookmark } = useBookmarks();
 
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 const sortedBookmarks = computed(() => {
   return [...bookmarkList.value].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 });
 
@@ -63,11 +63,17 @@ const handleRemove = async (storyId: string) => {
           </a>
 
           <div class="bookmark-meta">
-            <a :href="`${basePath}item/${bookmark.storyId}`" class="view-comments">
+            <a
+              :href="`${basePath}item/${bookmark.storyId}`"
+              class="view-comments"
+            >
               View discussion
             </a>
             <span class="meta-sep">·</span>
-            <span class="bookmark-time">Saved {{ timeAgo(new Date(bookmark.createdAt).getTime() / 1000) }}</span>
+            <span class="bookmark-time"
+              >Saved
+              {{ timeAgo(new Date(bookmark.createdAt).getTime() / 1000) }}</span
+            >
           </div>
         </div>
 

@@ -5,17 +5,17 @@
 /* Design Tokens */
 @theme {
   /* Colors - Light Mode Base */
-  --color-bg-primary: #FAFAFA;
-  --color-bg-secondary: #FFFFFF;
-  --color-bg-tertiary: #F4F4F5;
-  --color-text-primary: #18181B;
-  --color-text-secondary: #71717A;
-  --color-text-tertiary: #A1A1AA;
-  --color-border-default: #E4E4E7;
-  --color-border-subtle: #F4F4F5;
-  --color-accent: #F97316;
-  --color-accent-hover: #EA580C;
-  --color-accent-muted: #FED7AA;
+  --color-bg-primary: #fafafa;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f4f4f5;
+  --color-text-primary: #18181b;
+  --color-text-secondary: #71717a;
+  --color-text-tertiary: #a1a1aa;
+  --color-border-default: #e4e4e7;
+  --color-border-subtle: #f4f4f5;
+  --color-accent: #f97316;
+  --color-accent-hover: #ea580c;
+  --color-accent-muted: #fed7aa;
 
   /* Spacing - 4px base */
   --spacing-1: 4px;
@@ -72,17 +72,17 @@
 
 /* Dark mode */
 .dark {
-  --bg-primary: #09090B;
-  --bg-secondary: #18181B;
-  --bg-tertiary: #27272A;
-  --text-primary: #FAFAFA;
-  --text-secondary: #A1A1AA;
-  --text-tertiary: #71717A;
-  --border-default: #27272A;
-  --border-subtle: #1F1F23;
-  --accent: #FB923C;
-  --accent-hover: #F97316;
-  --accent-muted: #7C2D12;
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-tertiary: #27272a;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+  --border-default: #27272a;
+  --border-subtle: #1f1f23;
+  --accent: #fb923c;
+  --accent-hover: #f97316;
+  --accent-muted: #7c2d12;
 }
 
 /* Global reset and base */
@@ -105,7 +105,9 @@ body {
   min-height: 100vh;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
 }
 
 /* Typography utilities */
@@ -157,7 +159,8 @@ body {
 
 /* Loading skeleton animation */
 @keyframes skeleton-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

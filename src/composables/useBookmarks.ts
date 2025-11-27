@@ -1,9 +1,10 @@
-import { ref, computed, onMounted, watch } from 'vue';
-import { supabase, isSupabaseConfigured, type Bookmark } from '@/lib/supabase';
-import { getLocalStorage, setLocalStorage } from '@/lib/utils';
-import type { HNStory } from '@/lib/hn-client';
+import { ref, computed, onMounted, watch } from "vue";
+import { supabase, isSupabaseConfigured, type Bookmark } from "@/lib/supabase";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils";
+import type { HNStory } from "@/lib/hn-client";
+import log from "@/utils/logger";
 
-const STORAGE_KEY = 'hackernew-bookmarks';
+const STORAGE_KEY = "hackernew-bookmarks";
 
 interface LocalBookmark {
   storyId: string;
@@ -41,14 +42,14 @@ export function useBookmarks() {
     // Sync with Supabase if logged in
     if (userId.value && isSupabaseConfigured()) {
       try {
-        await supabase.from('bookmarks').insert({
+        await supabase.from("bookmarks").insert({
           user_id: userId.value,
           story_id: storyIdStr,
           story_title: story.title,
           story_url: story.url || null,
         } as never);
       } catch (error) {
-        console.error('Error syncing bookmark to Supabase:', error);
+        log.error("Failed to add bookmark to Supabase:", error);
       }
     }
   };
@@ -64,12 +65,12 @@ export function useBookmarks() {
     if (userId.value && isSupabaseConfigured()) {
       try {
         await supabase
-          .from('bookmarks')
+          .from("bookmarks")
           .delete()
-          .eq('user_id', userId.value)
-          .eq('story_id', storyIdStr);
+          .eq("user_id", userId.value)
+          .eq("story_id", storyIdStr);
       } catch (error) {
-        console.error('Error removing bookmark from Supabase:', error);
+        log.error("Failed to remove bookmark from Supabase:", error);
       }
     }
   };
@@ -93,23 +94,27 @@ export function useBookmarks() {
   };
 
   const loadFromSupabase = async () => {
-    if (!userId.value || !isSupabaseConfigured()) return;
+    if (!userId.value || !isSupabaseConfigured()) {
+      return;
+    }
 
     try {
       const { data, error } = await supabase
-        .from('bookmarks')
-        .select('*')
-        .eq('user_id', userId.value)
-        .order('created_at', { ascending: false });
+        .from("bookmarks")
+        .select("*")
+        .eq("user_id", userId.value)
+        .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       // Merge Supabase bookmarks with local
       if (data) {
         (data as unknown as Bookmark[]).forEach((b) => {
           bookmarks.value.set(b.story_id, {
             storyId: b.story_id,
-            storyTitle: b.story_title || '',
+            storyTitle: b.story_title || "",
             storyUrl: b.story_url,
             createdAt: b.created_at,
           });
@@ -117,7 +122,7 @@ export function useBookmarks() {
         saveToLocalStorage();
       }
     } catch (error) {
-      console.error('Error loading bookmarks from Supabase:', error);
+      log.error("Failed to load bookmarks from Supabase:", error);
     }
   };
 
@@ -128,7 +133,7 @@ export function useBookmarks() {
     }
   };
 
-  const initBookmarks = async () => {
+  const initBookmarks = () => {
     loadFromLocalStorage();
     loading.value = false;
   };

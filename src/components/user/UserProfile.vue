@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { ArrowLeft, Calendar, Award, ExternalLink } from 'lucide-vue-next';
-import type { HNUser, HNStory } from '@/lib/hn-client';
-import { getUser, getStory, getUserUrl } from '@/lib/hn-client';
-import { timeAgo, formatDateShort, sanitizeHtml } from '@/lib/utils';
-import Skeleton from '../ui/Skeleton.vue';
-import StoryItem from '../story/StoryItem.vue';
+import { ref, computed, onMounted } from "vue";
+import { ArrowLeft, Calendar, Award, ExternalLink } from "lucide-vue-next";
+import type { HNUser, HNStory } from "@/lib/hn-client";
+import { getUser, getStory, getUserUrl } from "@/lib/hn-client";
+import { timeAgo, formatDateShort, sanitizeHtml } from "@/lib/utils";
+import Skeleton from "../ui/Skeleton.vue";
+import StoryItem from "../story/StoryItem.vue";
 
 interface Props {
   username: string;
@@ -18,38 +18,42 @@ const submissions = ref<HNStory[]>([]);
 const loading = ref(true);
 const loadingSubmissions = ref(false);
 const error = ref<string | null>(null);
-const activeTab = ref<'submissions' | 'about'>('submissions');
+const activeTab = ref<"submissions" | "about">("submissions");
 
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 // Get actual username from URL if placeholder
 const actualUsername = computed(() => {
-  if (props.username === 'placeholder' && typeof window !== 'undefined') {
-    const pathParts = window.location.pathname.split('/');
-    const userIndex = pathParts.indexOf('user') + 1;
+  if (props.username === "placeholder" && typeof window !== "undefined") {
+    const pathParts = window.location.pathname.split("/");
+    const userIndex = pathParts.indexOf("user") + 1;
     return pathParts[userIndex] || null;
   }
   return props.username;
 });
 
 const accountAge = computed(() => {
-  if (!user.value) return '';
+  if (!user.value) {
+    return "";
+  }
   return formatDateShort(user.value.created);
 });
 
 const aboutHtml = computed(() => {
-  if (!user.value?.about) return '';
+  if (!user.value?.about) {
+    return "";
+  }
   return sanitizeHtml(user.value.about);
 });
 
 const hnProfileUrl = computed(() => {
-  return actualUsername.value ? getUserUrl(actualUsername.value) : '';
+  return actualUsername.value ? getUserUrl(actualUsername.value) : "";
 });
 
 const fetchUser = async () => {
   const name = actualUsername.value;
   if (!name) {
-    error.value = 'Invalid username';
+    error.value = "Invalid username";
     loading.value = false;
     return;
   }
@@ -60,7 +64,7 @@ const fetchUser = async () => {
 
     const data = await getUser(name);
     if (!data) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     user.value = data;
@@ -70,16 +74,18 @@ const fetchUser = async () => {
       loadingSubmissions.value = true;
       const submissionIds = data.submitted.slice(0, 15);
       const stories = await Promise.all(
-        submissionIds.map((id) => getStory(id))
+        submissionIds.map((id) => getStory(id)),
       );
-      submissions.value = stories.filter(
-        (s): s is HNStory => s !== null && s.type === 'story' && !s.deleted && !s.dead
-      ).slice(0, 10);
+      submissions.value = stories
+        .filter(
+          (s): s is HNStory =>
+            s !== null && s.type === "story" && !s.deleted && !s.dead,
+        )
+        .slice(0, 10);
       loadingSubmissions.value = false;
     }
   } catch (err) {
-    console.error('Error fetching user:', err);
-    error.value = 'Failed to load user profile.';
+    error.value = "Failed to load user profile.";
   } finally {
     loading.value = false;
   }
@@ -131,7 +137,12 @@ onMounted(() => {
           </div>
         </div>
 
-        <a :href="hnProfileUrl" class="hn-link" target="_blank" rel="noopener noreferrer">
+        <a
+          :href="hnProfileUrl"
+          class="hn-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <ExternalLink :size="14" />
           View on Hacker News
         </a>

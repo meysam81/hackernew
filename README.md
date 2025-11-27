@@ -84,23 +84,23 @@ npm install -g bun
 
 ### For Readers
 
-| Feature | Description |
-|---------|-------------|
-| **Dark/Light Mode** | Respects system preference, toggle anytime |
+| Feature                 | Description                                    |
+| ----------------------- | ---------------------------------------------- |
+| **Dark/Light Mode**     | Respects system preference, toggle anytime     |
 | **Keyboard Navigation** | `j`/`k` to move, `o` to open, `c` for comments |
-| **Bookmarks** | Save stories for later (syncs with account) |
-| **Reading History** | Keep track of what you've read |
-| **Density Toggle** | Comfortable or compact view |
+| **Bookmarks**           | Save stories for later (syncs with account)    |
+| **Reading History**     | Keep track of what you've read                 |
+| **Density Toggle**      | Comfortable or compact view                    |
 
 ### For Developers
 
-| Feature | Description |
-|---------|-------------|
+| Feature                 | Description                       |
+| ----------------------- | --------------------------------- |
 | **Island Architecture** | Static pages, hydrated components |
-| **Type-Safe** | Full TypeScript throughout |
-| **Modern CSS** | Tailwind v4 with design tokens |
-| **Auth Ready** | Supabase OAuth (GitHub/Google) |
-| **Zero Config Deploy** | Works on any static host |
+| **Type-Safe**           | Full TypeScript throughout        |
+| **Modern CSS**          | Tailwind v4 with design tokens    |
+| **Auth Ready**          | Supabase OAuth (GitHub/Google)    |
+| **Zero Config Deploy**  | Works on any static host          |
 
 ### Keyboard Shortcuts
 
@@ -174,6 +174,7 @@ Want bookmarks that sync across devices? Set up Supabase:
 3. **Enable OAuth** — In Authentication → Providers, enable GitHub and/or Google
 
 4. **Add your credentials**:
+
    ```bash
    cp .env.example .env
    ```
@@ -212,8 +213,8 @@ Update `astro.config.mjs`:
 
 ```js
 export default defineConfig({
-  site: 'https://your-domain.com',
-  base: '/', // Remove /hackernew if using root domain
+  site: "https://your-domain.com",
+  base: "/", // Remove /hackernew if using root domain
   // ...
 });
 ```
@@ -262,24 +263,28 @@ The design takes cues from tools we admire: Linear's clarity, Vercel's simplicit
 <summary><strong>Why not just use the official HN site?</strong></summary>
 
 You should! The official site is great and we use it daily. This is just a learning project and design exploration.
+
 </details>
 
 <details>
 <summary><strong>Will this replace my HN workflow?</strong></summary>
 
 Probably not, and that's okay. It's meant for exploring what's possible, not replacing what works.
+
 </details>
 
 <details>
 <summary><strong>Can I deploy my own instance?</strong></summary>
 
 Absolutely! That's the whole point. Fork it, customize it, make it yours.
+
 </details>
 
 <details>
 <summary><strong>Why Bun instead of npm/yarn/pnpm?</strong></summary>
 
 Speed, mostly. But the project works with any package manager — just replace `bun` with your preferred tool.
+
 </details>
 
 ---

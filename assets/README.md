@@ -21,15 +21,15 @@ assets/
 
 ## Brand Colors
 
-| Name | Hex | Usage |
-|------|-----|-------|
-| Orange (Primary) | `#F97316` | Accent, links, CTAs |
-| Orange (Light) | `#FB923C` | Hover states, gradients |
-| Orange (Dark) | `#EA580C` | Pressed states |
-| Background Dark | `#09090B` | Dark mode background |
-| Background Light | `#FAFAFA` | Light mode background |
-| Text Primary | `#FAFAFA` / `#18181B` | Main text (dark/light) |
-| Text Secondary | `#A1A1AA` / `#71717A` | Secondary text |
+| Name             | Hex                   | Usage                   |
+| ---------------- | --------------------- | ----------------------- |
+| Orange (Primary) | `#F97316`             | Accent, links, CTAs     |
+| Orange (Light)   | `#FB923C`             | Hover states, gradients |
+| Orange (Dark)    | `#EA580C`             | Pressed states          |
+| Background Dark  | `#09090B`             | Dark mode background    |
+| Background Light | `#FAFAFA`             | Light mode background   |
+| Text Primary     | `#FAFAFA` / `#18181B` | Main text (dark/light)  |
+| Text Secondary   | `#A1A1AA` / `#71717A` | Secondary text          |
 
 ## Typography
 
@@ -42,16 +42,19 @@ assets/
 ### To PNG (for Product Hunt, social media)
 
 Using Inkscape (CLI):
+
 ```bash
 inkscape -w 1270 -h 760 gallery-1-hero.svg -o gallery-1-hero.png
 ```
 
 Using ImageMagick:
+
 ```bash
 convert -density 300 gallery-1-hero.svg gallery-1-hero.png
 ```
 
 Using Figma:
+
 1. Import SVG
 2. Export as PNG at 2x
 
@@ -66,6 +69,7 @@ cwebp -q 90 gallery-1-hero.png -o gallery-1-hero.webp
 All assets in this directory are part of the HackerNew project and are licensed under Apache 2.0.
 
 Feel free to:
+
 - Use for promoting HackerNew
 - Modify for your own fork
 - Reference in articles/tutorials about the project
@@ -88,4 +92,4 @@ When creating new marketing assets:
 
 ---
 
-*Questions? Open an issue on GitHub.*
+_Questions? Open an issue on GitHub._

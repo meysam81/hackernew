@@ -1,4 +1,5 @@
-import ky from 'ky';
+import ky from "ky";
+import log from "@/utils/logger";
 
 // HN API Types
 export interface HNStory {
@@ -11,7 +12,7 @@ export interface HNStory {
   score: number;
   descendants: number;
   kids?: number[];
-  type: 'story' | 'job' | 'poll' | 'pollopt';
+  type: "story" | "job" | "poll" | "pollopt";
   deleted?: boolean;
   dead?: boolean;
 }
@@ -23,7 +24,7 @@ export interface HNComment {
   time: number;
   kids?: number[];
   parent: number;
-  type: 'comment';
+  type: "comment";
   deleted?: boolean;
   dead?: boolean;
 }
@@ -38,15 +39,15 @@ export interface HNUser {
 
 export type HNItem = HNStory | HNComment;
 
-export type FeedType = 'top' | 'new' | 'best' | 'ask' | 'show' | 'job';
+export type FeedType = "top" | "new" | "best" | "ask" | "show" | "job";
 
 // Configure Ky instance for HN API
 export const hnApi = ky.create({
-  prefixUrl: 'https://hacker-news.firebaseio.com/v0',
+  prefixUrl: "https://hacker-news.firebaseio.com/v0",
   timeout: 15000,
   retry: {
     limit: 2,
-    methods: ['get'],
+    methods: ["get"],
     statusCodes: [408, 429, 500, 502, 503, 504],
   },
 });
@@ -62,7 +63,9 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 function getCached<T>(key: string): T | null {
   const entry = cache.get(key) as CacheEntry<T> | undefined;
-  if (!entry) return null;
+  if (!entry) {
+    return null;
+  }
 
   const isStale = Date.now() - entry.timestamp > CACHE_TTL;
   if (isStale) {
@@ -83,7 +86,9 @@ export async function getStoryIds(type: FeedType): Promise<number[]> {
   const cacheKey = `ids:${type}`;
 
   const cached = getCached<number[]>(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
 
   const ids = await hnApi.get(endpoint).json<number[]>();
   setCache(cacheKey, ids);
@@ -95,7 +100,9 @@ export async function getItem<T extends HNItem>(id: number): Promise<T | null> {
   const cacheKey = `item:${id}`;
 
   const cached = getCached<T>(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
 
   try {
     const item = await hnApi.get(`item/${id}.json`).json<T | null>();
@@ -104,16 +111,16 @@ export async function getItem<T extends HNItem>(id: number): Promise<T | null> {
     }
     return item;
   } catch (error) {
-    console.error(`Error fetching item ${id}:`, error);
+    log.error(`Failed to fetch item ${id}:`, error);
     return null;
   }
 }
 
-export async function getStory(id: number): Promise<HNStory | null> {
+export function getStory(id: number): Promise<HNStory | null> {
   return getItem<HNStory>(id);
 }
 
-export async function getComment(id: number): Promise<HNComment | null> {
+export function getComment(id: number): Promise<HNComment | null> {
   return getItem<HNComment>(id);
 }
 
@@ -121,7 +128,9 @@ export async function getUser(username: string): Promise<HNUser | null> {
   const cacheKey = `user:${username}`;
 
   const cached = getCached<HNUser>(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
 
   try {
     const user = await hnApi.get(`user/${username}.json`).json<HNUser | null>();
@@ -130,7 +139,7 @@ export async function getUser(username: string): Promise<HNUser | null> {
     }
     return user;
   } catch (error) {
-    console.error(`Error fetching user ${username}:`, error);
+    log.error(`Failed to fetch user ${username}:`, error);
     return null;
   }
 }
@@ -138,33 +147,32 @@ export async function getUser(username: string): Promise<HNUser | null> {
 export async function getStories(
   type: FeedType,
   limit: number = 30,
-  offset: number = 0
+  offset: number = 0,
 ): Promise<HNStory[]> {
   const ids = await getStoryIds(type);
   const slicedIds = ids.slice(offset, offset + limit);
 
-  const stories = await Promise.all(
-    slicedIds.map((id) => getStory(id))
-  );
+  const stories = await Promise.all(slicedIds.map((id) => getStory(id)));
 
-  return stories.filter((story): story is HNStory => story !== null && !story.deleted && !story.dead);
+  return stories.filter(
+    (story): story is HNStory =>
+      story !== null && !story.deleted && !story.dead,
+  );
 }
 
 export async function getCommentTree(
   commentIds: number[],
   depth: number = 0,
-  maxDepth: number = 10
+  maxDepth: number = 10,
 ): Promise<(HNComment & { replies: HNComment[] })[]> {
   if (depth >= maxDepth || commentIds.length === 0) {
     return [];
   }
 
-  const comments = await Promise.all(
-    commentIds.map((id) => getComment(id))
-  );
+  const comments = await Promise.all(commentIds.map((id) => getComment(id)));
 
   const validComments = comments.filter(
-    (c): c is HNComment => c !== null && !c.deleted && !c.dead
+    (c): c is HNComment => c !== null && !c.deleted && !c.dead,
   );
 
   const commentsWithReplies = await Promise.all(
@@ -173,7 +181,7 @@ export async function getCommentTree(
         ? await getCommentTree(comment.kids, depth + 1, maxDepth)
         : [];
       return { ...comment, replies };
-    })
+    }),
   );
 
   return commentsWithReplies;
@@ -181,12 +189,14 @@ export async function getCommentTree(
 
 // Utility functions
 export function getDomain(url?: string): string {
-  if (!url) return '';
+  if (!url) {
+    return "";
+  }
   try {
     const hostname = new URL(url).hostname;
-    return hostname.replace(/^www\./, '');
+    return hostname.replace(/^www\./, "");
   } catch {
-    return '';
+    return "";
   }
 }
 

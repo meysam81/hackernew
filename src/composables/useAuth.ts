@@ -1,6 +1,7 @@
-import { ref, onMounted } from 'vue';
-import { supabase, isSupabaseConfigured, type Profile } from '@/lib/supabase';
-import type { User, Session } from '@supabase/supabase-js';
+import { ref, onMounted } from "vue";
+import { supabase, isSupabaseConfigured, type Profile } from "@/lib/supabase";
+import type { User, Session } from "@supabase/supabase-js";
+import log from "@/lib/logger";
 
 // Shared state across components
 const user = ref<User | null>(null);
@@ -11,12 +12,11 @@ const isConfigured = ref(false);
 export function useAuth() {
   const signInWithGitHub = async () => {
     if (!isConfigured.value) {
-      console.warn('Supabase not configured');
-      return { error: new Error('Supabase not configured') };
+      return { error: new Error("Supabase not configured") };
     }
 
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
+      provider: "github",
       options: {
         redirectTo: `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`,
       },
@@ -27,12 +27,11 @@ export function useAuth() {
 
   const signInWithGoogle = async () => {
     if (!isConfigured.value) {
-      console.warn('Supabase not configured');
-      return { error: new Error('Supabase not configured') };
+      return { error: new Error("Supabase not configured") };
     }
 
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider: "google",
       options: {
         redirectTo: `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`,
       },
@@ -52,13 +51,12 @@ export function useAuth() {
 
   const fetchProfile = async (userId: string) => {
     const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
       .single();
 
     if (error) {
-      console.error('Error fetching profile:', error);
       return null;
     }
 
@@ -66,12 +64,14 @@ export function useAuth() {
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user.value) return { error: new Error('Not authenticated') };
+    if (!user.value) {
+      return { error: new Error("Not authenticated") };
+    }
 
     const { data, error } = await supabase
-      .from('profiles')
+      .from("profiles")
       .update(updates as never)
-      .eq('id', user.value.id)
+      .eq("id", user.value.id)
       .select()
       .single();
 
@@ -102,7 +102,9 @@ export function useAuth() {
 
     try {
       // Get initial session
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       await handleAuthChange(session);
 
       // Listen for auth changes
@@ -110,7 +112,7 @@ export function useAuth() {
         await handleAuthChange(session);
       });
     } catch (error) {
-      console.error('Auth initialization error:', error);
+      log.error("Failed to initialize auth:", error);
     } finally {
       loading.value = false;
     }

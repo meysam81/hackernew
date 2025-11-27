@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { User, Bookmark, LogOut, ChevronDown } from 'lucide-vue-next';
-import { useAuth } from '@/composables/useAuth';
-import { useBookmarks } from '@/composables/useBookmarks';
+import { ref, computed } from "vue";
+import { User, Bookmark, LogOut, ChevronDown } from "lucide-vue-next";
+import { useAuth } from "@/composables/useAuth";
+import { useBookmarks } from "@/composables/useBookmarks";
 
 const { user, profile, signOut } = useAuth();
 const { bookmarkCount } = useBookmarks();
 
 const isOpen = ref(false);
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 const displayName = computed(() => {
-  return profile.value?.username ||
-         user.value?.user_metadata?.user_name ||
-         user.value?.email?.split('@')[0] ||
-         'User';
+  return (
+    profile.value?.username ||
+    user.value?.user_metadata?.user_name ||
+    user.value?.email?.split("@")[0] ||
+    "User"
+  );
 });
 
 const toggleMenu = () => {
@@ -39,19 +41,25 @@ const handleSignOut = async () => {
         <User :size="16" />
       </span>
       <span class="user-name">{{ displayName }}</span>
-      <ChevronDown :size="14" :class="{ 'rotated': isOpen }" />
+      <ChevronDown :size="14" :class="{ rotated: isOpen }" />
     </button>
 
     <Transition name="dropdown">
       <div v-if="isOpen" class="menu-dropdown">
-        <a :href="`${basePath}user/${displayName}`" class="menu-item" @click="closeMenu">
+        <a
+          :href="`${basePath}user/${displayName}`"
+          class="menu-item"
+          @click="closeMenu"
+        >
           <User :size="16" />
           Profile
         </a>
         <a :href="`${basePath}bookmarks`" class="menu-item" @click="closeMenu">
           <Bookmark :size="16" />
           Bookmarks
-          <span v-if="bookmarkCount > 0" class="badge">{{ bookmarkCount }}</span>
+          <span v-if="bookmarkCount > 0" class="badge">{{
+            bookmarkCount
+          }}</span>
         </a>
         <div class="menu-divider"></div>
         <button class="menu-item menu-item-danger" @click="handleSignOut">
@@ -175,7 +183,9 @@ const handleSignOut = async () => {
 /* Dropdown transition */
 .dropdown-enter-active,
 .dropdown-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .dropdown-enter-from,

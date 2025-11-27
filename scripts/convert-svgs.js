@@ -1,53 +1,54 @@
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";
+import log from "../src/utils/logger";
 
 var KNOWN_IMAGES = {
   favicon: {
     sizes: [16, 32, 48, 64, 128, 256],
-    suffix: function (size) {
+    suffix: function suffix(size) {
       return "-" + size + "x" + size;
     },
   },
   "favicon-16x16": {
     sizes: [16],
-    suffix: function () {
+    suffix: function suffix() {
       return "";
     },
   },
   "favicon-32x32": {
     sizes: [32],
-    suffix: function () {
+    suffix: function suffix() {
       return "";
     },
   },
   "apple-touch-icon": {
     sizes: [180],
-    suffix: function () {
+    suffix: function suffix() {
       return "";
     },
   },
   "og-image": {
     sizes: [{ width: 1200, height: 630 }],
-    suffix: function () {
+    suffix: function suffix() {
       return "";
     },
   },
   "twitter-image": {
     sizes: [{ width: 1200, height: 600 }],
-    suffix: function () {
+    suffix: function suffix() {
       return "";
     },
   },
   "android-chrome-192x192": {
     sizes: [192],
-    suffix: function () {
+    suffix: function suffix() {
       return "";
     },
   },
   "android-chrome-512x512": {
     sizes: [512],
-    suffix: function () {
+    suffix: function suffix() {
       return "";
     },
   },
@@ -146,13 +147,11 @@ async function convertSvgToPng(svgPath) {
 
         await convertWithSize(svgPath, outputPath, sizeConfig);
 
+        // eslint-disable-next-line no-unused-vars
         var sizeLabel =
           typeof sizeConfig === "number"
             ? sizeConfig + "x" + sizeConfig
             : sizeConfig.width + "x" + sizeConfig.height;
-        console.log(
-          "Converted: " + svgPath + " -> " + outputPath + " (" + sizeLabel + ")"
-        );
       }
     } else {
       var pngPath = svgPath.replace(/\.svg$/i, ".png");
@@ -162,11 +161,9 @@ async function convertSvgToPng(svgPath) {
           compressionLevel: 9,
         })
         .toFile(pngPath);
-
-      console.log("Converted: " + svgPath + " -> " + pngPath);
     }
   } catch (err) {
-    console.error("Error converting " + svgPath + ": " + err.message);
+    log.error(`Error processing file ${svgPath}: ${err.message}`);
   }
 }
 
@@ -175,27 +172,18 @@ async function main() {
   var resolvedDir = path.resolve(config.directory);
 
   if (!fs.existsSync(resolvedDir)) {
-    console.error("Directory does not exist: " + resolvedDir);
     process.exit(1);
   }
-
-  console.log("Searching for SVGs in: " + resolvedDir);
-  console.log("Depth: " + (config.depth === -1 ? "unlimited" : config.depth));
 
   var svgFiles = findSvgFiles(resolvedDir, 0, config.depth);
 
   if (svgFiles.length === 0) {
-    console.log("No SVG files found.");
     return;
   }
-
-  console.log("Found " + svgFiles.length + " SVG file(s).");
 
   for (var i = 0; i < svgFiles.length; i++) {
     await convertSvgToPng(svgFiles[i]);
   }
-
-  console.log("Done!");
 }
 
 main();

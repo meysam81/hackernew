@@ -7,6 +7,7 @@ Everything you need to launch HackerNew.
 ## Pre-Launch
 
 ### Assets Ready
+
 - [x] Logo (`assets/logo.svg`)
 - [x] Open Graph image (`assets/og-image.svg`)
 - [x] Product Hunt gallery images (`assets/producthunt/`)
@@ -14,6 +15,7 @@ Everything you need to launch HackerNew.
 - [ ] Real screenshots (`assets/screenshots/`) — **Capture these!**
 
 ### Convert SVGs to PNG
+
 Social platforms need PNG images. Convert SVGs before launch:
 
 ```bash
@@ -33,12 +35,14 @@ inkscape -w 600 -h 600 assets/producthunt/thumbnail.svg -o assets/producthunt/th
 Or use [CloudConvert](https://cloudconvert.com/svg-to-png), [Figma](https://figma.com), or any design tool.
 
 ### Documentation Ready
+
 - [x] README.md — Exceptional first-time experience
 - [x] PRODUCT_HUNT.md — Full submission materials
 - [x] SHOW_HN.md — Hacker News post materials
 - [x] LICENSE — Apache 2.0
 
 ### Technical Checks
+
 - [ ] Site deployed and working (`hackernew.dev`)
 - [ ] All links in README work
 - [ ] Mobile responsive works
@@ -51,6 +55,7 @@ Or use [CloudConvert](https://cloudconvert.com/svg-to-png), [Figma](https://figm
 ## Launch Day
 
 ### Product Hunt (if launching)
+
 1. Go to [producthunt.com/posts/new](https://www.producthunt.com/posts/new)
 2. Fill in details from `PRODUCT_HUNT.md`
 3. Upload gallery images (PNG versions)
@@ -59,6 +64,7 @@ Or use [CloudConvert](https://cloudconvert.com/svg-to-png), [Figma](https://figm
 6. Engage with ALL comments throughout the day
 
 ### Show HN
+
 1. Go to [news.ycombinator.com/submit](https://news.ycombinator.com/submit)
 2. Use title from `SHOW_HN.md`
 3. Submit URL: `https://hackernew.dev`
@@ -67,7 +73,9 @@ Or use [CloudConvert](https://cloudconvert.com/svg-to-png), [Figma](https://figm
 6. Best times: Tue-Thu, 8-10 AM ET
 
 ### Social Media
+
 Post to these platforms (copy in `PRODUCT_HUNT.md`):
+
 - [ ] Twitter/X
 - [ ] LinkedIn
 - [ ] Mastodon
@@ -79,11 +87,13 @@ Post to these platforms (copy in `PRODUCT_HUNT.md`):
 ## Post-Launch
 
 ### Monitor
+
 - [ ] Respond to all comments (be genuine, be humble)
 - [ ] Fix any bugs reported ASAP
 - [ ] Note feature requests for later
 
 ### Follow Up
+
 - [ ] Thank the community
 - [ ] Write a blog post about what you learned
 - [ ] Consider a "lessons learned" Show HN/blog post
@@ -93,24 +103,24 @@ Post to these platforms (copy in `PRODUCT_HUNT.md`):
 
 ## Files Overview
 
-| File | Purpose |
-|------|---------|
-| `README.md` | Main project documentation |
+| File              | Purpose                           |
+| ----------------- | --------------------------------- |
+| `README.md`       | Main project documentation        |
 | `PRODUCT_HUNT.md` | Product Hunt submission materials |
-| `SHOW_HN.md` | Hacker News Show HN materials |
-| `LAUNCH.md` | This checklist |
-| `assets/` | All visual assets |
+| `SHOW_HN.md`      | Hacker News Show HN materials     |
+| `LAUNCH.md`       | This checklist                    |
+| `assets/`         | All visual assets                 |
 
 ---
 
 ## Key URLs
 
-| Resource | URL |
-|----------|-----|
-| Live Site | https://hackernew.dev |
-| GitHub | https://github.com/meysam81/hackernew |
-| Product Hunt | *(after submission)* |
-| Show HN | *(after submission)* |
+| Resource     | URL                                   |
+| ------------ | ------------------------------------- |
+| Live Site    | https://hackernew.dev                 |
+| GitHub       | https://github.com/meysam81/hackernew |
+| Product Hunt | _(after submission)_                  |
+| Show HN      | _(after submission)_                  |
 
 ---
 
@@ -124,4 +134,4 @@ Post to these platforms (copy in `PRODUCT_HUNT.md`):
 
 ---
 
-*Good luck with the launch!*
+_Good luck with the launch!_

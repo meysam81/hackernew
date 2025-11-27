@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from "vue";
 
 interface Props {
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
   loading?: boolean;
   href?: string;
@@ -11,30 +11,30 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: 'primary',
-  size: 'md',
+  variant: "primary",
+  size: "md",
   disabled: false,
   loading: false,
   external: false,
 });
 
 const emit = defineEmits<{
-  (e: 'click', event: MouseEvent): void;
+  (e: "click", event: MouseEvent): void;
 }>();
 
 const classes = computed(() => [
-  'btn',
+  "btn",
   `btn-${props.variant}`,
   `btn-${props.size}`,
   {
-    'btn-disabled': props.disabled || props.loading,
-    'btn-loading': props.loading,
+    "btn-disabled": props.disabled || props.loading,
+    "btn-loading": props.loading,
   },
 ]);
 
 const handleClick = (event: MouseEvent) => {
   if (!props.disabled && !props.loading) {
-    emit('click', event);
+    emit("click", event);
   }
 };
 </script>

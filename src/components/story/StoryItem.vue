@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { ChevronUp, MessageSquare, Bookmark, BookmarkCheck, ExternalLink } from 'lucide-vue-next';
-import type { HNStory } from '@/lib/hn-client';
-import { getDomain } from '@/lib/hn-client';
-import { timeAgo, formatDate, pluralize } from '@/lib/utils';
-import { useBookmarks } from '@/composables/useBookmarks';
-import { useReadHistory } from '@/composables/useReadHistory';
+import { computed } from "vue";
+import {
+  ChevronUp,
+  MessageSquare,
+  Bookmark,
+  BookmarkCheck,
+  ExternalLink,
+} from "lucide-vue-next";
+import type { HNStory } from "@/lib/hn-client";
+import { getDomain } from "@/lib/hn-client";
+import { timeAgo, formatDate, pluralize } from "@/lib/utils";
+import { useBookmarks } from "@/composables/useBookmarks";
+import { useReadHistory } from "@/composables/useReadHistory";
 
 interface Props {
   story: HNStory;
@@ -18,8 +24,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  (e: 'click', story: HNStory): void;
-  (e: 'openComments', story: HNStory): void;
+  (e: "click", story: HNStory): void;
+  (e: "openComments", story: HNStory): void;
 }>();
 
 const { isBookmarked, toggleBookmark } = useBookmarks();
@@ -32,11 +38,11 @@ const commentCount = computed(() => props.story.descendants || 0);
 const isStoryBookmarked = computed(() => isBookmarked(props.story.id));
 const isStoryRead = computed(() => isRead(props.story.id));
 
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 const handleTitleClick = () => {
   markAsRead(props.story.id);
-  emit('click', props.story);
+  emit("click", props.story);
 };
 
 const handleBookmarkClick = async (e: Event) => {
@@ -47,15 +53,13 @@ const handleBookmarkClick = async (e: Event) => {
 
 const handleCommentsClick = (e: Event) => {
   e.preventDefault();
-  emit('openComments', props.story);
+  emit("openComments", props.story);
 };
 </script>
 
 <template>
   <article class="story-item" :class="{ 'story-read': isStoryRead }">
-    <div class="story-rank" v-if="rank">
-      {{ rank }}.
-    </div>
+    <div class="story-rank" v-if="rank">{{ rank }}.</div>
 
     <div class="story-vote" v-if="showUpvote">
       <button class="upvote-btn" aria-label="Upvote">
@@ -85,15 +89,17 @@ const handleCommentsClick = (e: Event) => {
           {{ story.title }}
         </a>
 
-        <span v-if="domain" class="story-domain">
-          ({{ domain }})
-        </span>
+        <span v-if="domain" class="story-domain"> ({{ domain }}) </span>
       </div>
 
       <div class="story-meta">
-        <span class="story-score">{{ story.score }} {{ story.score === 1 ? 'point' : 'points' }}</span>
+        <span class="story-score"
+          >{{ story.score }} {{ story.score === 1 ? "point" : "points" }}</span
+        >
         <span class="meta-sep">·</span>
-        <a :href="`${basePath}user/${story.by}`" class="story-author">{{ story.by }}</a>
+        <a :href="`${basePath}user/${story.by}`" class="story-author">{{
+          story.by
+        }}</a>
         <span class="meta-sep">·</span>
         <span class="story-time" :title="formattedDate">{{ timeAgoStr }}</span>
         <span class="meta-sep">·</span>
@@ -103,12 +109,12 @@ const handleCommentsClick = (e: Event) => {
           @click="handleCommentsClick"
         >
           <MessageSquare :size="12" />
-          {{ pluralize(commentCount, 'comment') }}
+          {{ pluralize(commentCount, "comment") }}
         </a>
 
         <button
           class="bookmark-btn"
-          :class="{ 'bookmarked': isStoryBookmarked }"
+          :class="{ bookmarked: isStoryBookmarked }"
           :aria-label="isStoryBookmarked ? 'Remove bookmark' : 'Add bookmark'"
           @click="handleBookmarkClick"
         >
@@ -167,7 +173,9 @@ const handleCommentsClick = (e: Event) => {
   color: var(--text-tertiary);
   cursor: pointer;
   border-radius: var(--radius-sm);
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .upvote-btn:hover {
@@ -265,7 +273,9 @@ const handleCommentsClick = (e: Event) => {
   cursor: pointer;
   border-radius: var(--radius-sm);
   opacity: 0;
-  transition: opacity var(--transition-fast), color var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .story-item:hover .bookmark-btn {

@@ -1,8 +1,9 @@
-import { ref, onMounted } from 'vue';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { getLocalStorage, setLocalStorage } from '@/lib/utils';
+import { ref, onMounted } from "vue";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { getLocalStorage, setLocalStorage } from "@/lib/utils";
+import log from "@/lib/logger";
 
-const STORAGE_KEY = 'hackernew-read';
+const STORAGE_KEY = "hackernew-read";
 const MAX_LOCAL_HISTORY = 500;
 
 // Shared state
@@ -17,7 +18,9 @@ export function useReadHistory() {
   const markAsRead = async (storyId: number | string) => {
     const storyIdStr = String(storyId);
 
-    if (readStories.value.has(storyIdStr)) return;
+    if (readStories.value.has(storyIdStr)) {
+      return;
+    }
 
     // Update local state
     readStories.value.add(storyIdStr);
@@ -26,12 +29,12 @@ export function useReadHistory() {
     // Sync with Supabase if logged in
     if (userId.value && isSupabaseConfigured()) {
       try {
-        await supabase.from('read_stories').upsert({
+        await supabase.from("read_stories").upsert({
           user_id: userId.value,
           story_id: storyIdStr,
         } as never);
       } catch (error) {
-        console.error('Error syncing read status:', error);
+        log.error("Failed to mark story as read in Supabase:", error);
       }
     }
   };
@@ -54,17 +57,21 @@ export function useReadHistory() {
   };
 
   const loadFromSupabase = async () => {
-    if (!userId.value || !isSupabaseConfigured()) return;
+    if (!userId.value || !isSupabaseConfigured()) {
+      return;
+    }
 
     try {
       const { data, error } = await supabase
-        .from('read_stories')
-        .select('story_id')
-        .eq('user_id', userId.value)
-        .order('read_at', { ascending: false })
+        .from("read_stories")
+        .select("story_id")
+        .eq("user_id", userId.value)
+        .order("read_at", { ascending: false })
         .limit(MAX_LOCAL_HISTORY);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       if (data) {
         (data as unknown as { story_id: string }[]).forEach((item) => {
@@ -73,7 +80,7 @@ export function useReadHistory() {
         saveToLocalStorage();
       }
     } catch (error) {
-      console.error('Error loading read history:', error);
+      log.error("Failed to load read stories from Supabase:", error);
     }
   };
 

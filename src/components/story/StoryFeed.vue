@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
-import type { HNStory, FeedType } from '@/lib/hn-client';
-import { getStories } from '@/lib/hn-client';
-import { useKeyboard } from '@/composables/useKeyboard';
-import { useBookmarks } from '@/composables/useBookmarks';
-import StoryItem from './StoryItem.vue';
-import StoryListSkeleton from './StoryListSkeleton.vue';
+import { ref, computed, onMounted, watch } from "vue";
+import type { HNStory, FeedType } from "@/lib/hn-client";
+import { getStories } from "@/lib/hn-client";
+import { useKeyboard } from "@/composables/useKeyboard";
+import { useBookmarks } from "@/composables/useBookmarks";
+import StoryItem from "./StoryItem.vue";
+import StoryListSkeleton from "./StoryListSkeleton.vue";
 
 interface Props {
   feedType: FeedType;
@@ -24,7 +24,7 @@ const currentPage = ref(0);
 const hasMore = ref(true);
 const selectedIndex = ref(0);
 
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 const { toggleBookmark } = useBookmarks();
 
@@ -49,8 +49,7 @@ const fetchStories = async (page: number = 0) => {
     hasMore.value = newStories.length === props.pageSize;
     currentPage.value = page;
   } catch (err) {
-    console.error('Error fetching stories:', err);
-    error.value = 'Failed to load stories. Please try again.';
+    error.value = "Failed to load stories. Please try again.";
   } finally {
     loading.value = false;
     loadingMore.value = false;
@@ -67,25 +66,32 @@ const refresh = () => {
   fetchStories(0);
 };
 
-const selectedStory = computed(() => stories.value[selectedIndex.value] || null);
+const selectedStory = computed(
+  () => stories.value[selectedIndex.value] || null,
+);
 
-const navigateToSelected = (direction: 'up' | 'down') => {
-  if (direction === 'down') {
-    selectedIndex.value = Math.min(selectedIndex.value + 1, stories.value.length - 1);
+const navigateToSelected = (direction: "up" | "down") => {
+  if (direction === "down") {
+    selectedIndex.value = Math.min(
+      selectedIndex.value + 1,
+      stories.value.length - 1,
+    );
   } else {
     selectedIndex.value = Math.max(selectedIndex.value - 1, 0);
   }
 
   // Scroll into view
-  const element = document.querySelector(`[data-story-index="${selectedIndex.value}"]`);
-  element?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const element = document.querySelector(
+    `[data-story-index="${selectedIndex.value}"]`,
+  );
+  element?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 };
 
 const openSelectedStory = () => {
   const story = selectedStory.value;
   if (story) {
     if (story.url) {
-      window.open(story.url, '_blank');
+      window.open(story.url, "_blank");
     } else {
       window.location.href = `${basePath}item/${story.id}`;
     }
@@ -119,10 +125,13 @@ onMounted(() => {
 });
 
 // Watch for feed type changes
-watch(() => props.feedType, () => {
-  selectedIndex.value = 0;
-  fetchStories(0);
-});
+watch(
+  () => props.feedType,
+  () => {
+    selectedIndex.value = 0;
+    fetchStories(0);
+  },
+);
 </script>
 
 <template>
@@ -154,19 +163,17 @@ watch(() => props.feedType, () => {
             :story="story"
             :rank="index + 1"
             @click="() => {}"
-            @open-comments="() => window.location.href = `${basePath}item/${story.id}`"
+            @open-comments="
+              () => (window.location.href = `${basePath}item/${story.id}`)
+            "
           />
         </div>
       </div>
 
       <!-- Load more -->
       <div class="load-more" v-if="hasMore">
-        <button
-          class="load-more-btn"
-          :disabled="loadingMore"
-          @click="loadMore"
-        >
-          {{ loadingMore ? 'Loading...' : 'Load more' }}
+        <button class="load-more-btn" :disabled="loadingMore" @click="loadMore">
+          {{ loadingMore ? "Loading..." : "Load more" }}
         </button>
       </div>
     </template>

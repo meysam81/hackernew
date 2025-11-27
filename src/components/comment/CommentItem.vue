@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { ChevronDown, ChevronRight, MessageSquare } from 'lucide-vue-next';
-import type { HNComment } from '@/lib/hn-client';
-import { timeAgo, formatDate, sanitizeHtml } from '@/lib/utils';
+import { ref, computed } from "vue";
+import { ChevronDown, ChevronRight, MessageSquare } from "lucide-vue-next";
+import type { HNComment } from "@/lib/hn-client";
+import { timeAgo, formatDate, sanitizeHtml } from "@/lib/utils";
 
 interface CommentWithReplies extends HNComment {
   replies: CommentWithReplies[];
@@ -21,13 +21,15 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const collapsed = ref(false);
-const basePath = import.meta.env.BASE_URL || '/';
+const basePath = import.meta.env.BASE_URL || "/";
 
 const timeAgoStr = computed(() => timeAgo(props.comment.time));
 const formattedDate = computed(() => formatDate(props.comment.time));
-const sanitizedText = computed(() => sanitizeHtml(props.comment.text || ''));
+const sanitizedText = computed(() => sanitizeHtml(props.comment.text || ""));
 const replyCount = computed(() => countReplies(props.comment));
-const isHighlighted = computed(() => props.comment.by === props.highlightAuthor);
+const isHighlighted = computed(
+  () => props.comment.by === props.highlightAuthor,
+);
 const indentClass = computed(() => `depth-${Math.min(props.depth, 8)}`);
 
 function countReplies(comment: CommentWithReplies): number {
@@ -44,7 +46,10 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-  <div class="comment-item" :class="[indentClass, { highlighted: isHighlighted }]">
+  <div
+    class="comment-item"
+    :class="[indentClass, { highlighted: isHighlighted }]"
+  >
     <div class="comment-collapse-line" @click="toggleCollapse">
       <div class="collapse-indicator">
         <ChevronDown v-if="!collapsed" :size="12" />
@@ -65,7 +70,7 @@ const toggleCollapse = () => {
           class="collapse-btn"
           @click="toggleCollapse"
         >
-          {{ collapsed ? `[+${replyCount}]` : '[-]' }}
+          {{ collapsed ? `[+${replyCount}]` : "[-]" }}
         </button>
       </div>
 
@@ -73,11 +78,14 @@ const toggleCollapse = () => {
 
       <div v-if="collapsed" class="comment-collapsed-summary">
         <MessageSquare :size="12" />
-        {{ replyCount }} {{ replyCount === 1 ? 'reply' : 'replies' }} hidden
+        {{ replyCount }} {{ replyCount === 1 ? "reply" : "replies" }} hidden
       </div>
 
       <!-- Nested replies -->
-      <div v-if="!collapsed && comment.replies.length > 0 && depth < maxDepth" class="comment-replies">
+      <div
+        v-if="!collapsed && comment.replies.length > 0 && depth < maxDepth"
+        class="comment-replies"
+      >
         <CommentItem
           v-for="reply in comment.replies"
           :key="reply.id"
@@ -89,10 +97,11 @@ const toggleCollapse = () => {
       </div>
 
       <!-- Too deep indicator -->
-      <div v-if="!collapsed && comment.replies.length > 0 && depth >= maxDepth" class="comment-too-deep">
-        <a :href="`${basePath}item/${comment.id}`">
-          Continue thread →
-        </a>
+      <div
+        v-if="!collapsed && comment.replies.length > 0 && depth >= maxDepth"
+        class="comment-too-deep"
+      >
+        <a :href="`${basePath}item/${comment.id}`"> Continue thread → </a>
       </div>
     </div>
   </div>
@@ -113,15 +122,33 @@ const toggleCollapse = () => {
 }
 
 /* Indentation levels */
-.depth-0 { margin-left: 0; }
-.depth-1 { margin-left: var(--spacing-4); }
-.depth-2 { margin-left: calc(var(--spacing-4) * 2); }
-.depth-3 { margin-left: calc(var(--spacing-4) * 3); }
-.depth-4 { margin-left: calc(var(--spacing-4) * 4); }
-.depth-5 { margin-left: calc(var(--spacing-4) * 5); }
-.depth-6 { margin-left: calc(var(--spacing-4) * 6); }
-.depth-7 { margin-left: calc(var(--spacing-4) * 7); }
-.depth-8 { margin-left: calc(var(--spacing-4) * 8); }
+.depth-0 {
+  margin-left: 0;
+}
+.depth-1 {
+  margin-left: var(--spacing-4);
+}
+.depth-2 {
+  margin-left: calc(var(--spacing-4) * 2);
+}
+.depth-3 {
+  margin-left: calc(var(--spacing-4) * 3);
+}
+.depth-4 {
+  margin-left: calc(var(--spacing-4) * 4);
+}
+.depth-5 {
+  margin-left: calc(var(--spacing-4) * 5);
+}
+.depth-6 {
+  margin-left: calc(var(--spacing-4) * 6);
+}
+.depth-7 {
+  margin-left: calc(var(--spacing-4) * 7);
+}
+.depth-8 {
+  margin-left: calc(var(--spacing-4) * 8);
+}
 
 .comment-collapse-line {
   display: flex;
@@ -265,13 +292,23 @@ const toggleCollapse = () => {
 }
 
 @media (max-width: 640px) {
-  .depth-1 { margin-left: var(--spacing-3); }
-  .depth-2 { margin-left: calc(var(--spacing-3) * 2); }
-  .depth-3 { margin-left: calc(var(--spacing-3) * 3); }
-  .depth-4 { margin-left: calc(var(--spacing-3) * 4); }
+  .depth-1 {
+    margin-left: var(--spacing-3);
+  }
+  .depth-2 {
+    margin-left: calc(var(--spacing-3) * 2);
+  }
+  .depth-3 {
+    margin-left: calc(var(--spacing-3) * 3);
+  }
+  .depth-4 {
+    margin-left: calc(var(--spacing-3) * 4);
+  }
   .depth-5,
   .depth-6,
   .depth-7,
-  .depth-8 { margin-left: calc(var(--spacing-3) * 5); }
+  .depth-8 {
+    margin-left: calc(var(--spacing-3) * 5);
+  }
 }
 </style>

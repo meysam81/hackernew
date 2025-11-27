@@ -11,6 +11,7 @@ Show HN: HackerNew – A modern, open-source reimagining of Hacker News
 ```
 
 Alternative titles (pick one):
+
 ```
 Show HN: I built a modern HN client with Astro, Vue, and Tailwind
 Show HN: HackerNew – What if HN was built with a 2025 stack?
@@ -169,6 +170,7 @@ Feel free to fork and use however you like.
 ## Technical Details (if asked for specifics)
 
 ### Architecture
+
 ```
 - Static site generation (Astro)
 - Island hydration for interactive components
@@ -179,6 +181,7 @@ Feel free to fork and use however you like.
 ```
 
 ### Key Files
+
 ```
 src/lib/hn-client.ts - HN API client with 5-min cache
 src/composables/useKeyboard.ts - Keyboard shortcut handling
@@ -187,6 +190,7 @@ src/styles/global.css - Design tokens and theming
 ```
 
 ### Deployment
+
 ```
 Works on any static host. Included GitHub Actions workflow
 deploys to GitHub Pages automatically.
@@ -210,10 +214,12 @@ No server required. No database required (unless you want auth).
 ## Best Times to Post
 
 Show HN posts do best when posted:
+
 - **Weekdays** (Tue-Thu tend to perform best)
 - **Morning US time** (8-10 AM ET / 5-7 AM PT)
 
 Avoid:
+
 - Weekends
 - US holidays
 - Late night PT
@@ -246,21 +252,25 @@ These can be submitted to HN separately and drive more traffic to the project.
 ## Sample Reply Templates
 
 ### For positive feedback:
+
 ```
 Thanks! Glad you like it. If you have feature ideas, feel free to open an issue: https://github.com/meysam81/hackernew/issues
 ```
 
 ### For constructive criticism:
+
 ```
 Good point, thanks for the feedback. [Address the specific issue]. I'll think about how to improve that.
 ```
 
 ### For "why bother" comments:
+
 ```
 Fair question! Mostly to learn—building real projects is how I pick up new tools. Sharing it in case others find it useful or want to learn from the code.
 ```
 
 ### For technical questions:
+
 ```
 [Answer thoroughly with code snippets if relevant]
 
@@ -269,4 +279,4 @@ The implementation is in `src/[relevant-path]` if you want to dig deeper: https:
 
 ---
 
-*Good luck with the Show HN post!*
+_Good luck with the Show HN post!_

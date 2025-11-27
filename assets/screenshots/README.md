@@ -55,6 +55,7 @@ This directory contains screenshots of HackerNew for documentation and marketing
 ### Screenshot Checklist
 
 Before capturing:
+
 - [ ] Clear browser cache and cookies
 - [ ] Use incognito/private window
 - [ ] Set viewport to consistent size
@@ -64,15 +65,15 @@ Before capturing:
 
 ### Current Screenshots
 
-| Filename | Description | Status |
-|----------|-------------|--------|
-| hero-dark.png | Main feed, dark mode | Needed |
-| hero-light.png | Main feed, light mode | Needed |
-| comments-dark.png | Comments thread | Needed |
-| keyboard-shortcuts.png | Shortcuts visible | Needed |
-| mobile-dark.png | Mobile view, dark | Needed |
-| mobile-light.png | Mobile view, light | Needed |
+| Filename               | Description           | Status |
+| ---------------------- | --------------------- | ------ |
+| hero-dark.png          | Main feed, dark mode  | Needed |
+| hero-light.png         | Main feed, light mode | Needed |
+| comments-dark.png      | Comments thread       | Needed |
+| keyboard-shortcuts.png | Shortcuts visible     | Needed |
+| mobile-dark.png        | Mobile view, dark     | Needed |
+| mobile-light.png       | Mobile view, light    | Needed |
 
 ---
 
-*Update this README as you add screenshots.*
+_Update this README as you add screenshots._
