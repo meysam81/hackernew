@@ -1,7 +1,7 @@
 import { ref, onMounted } from "vue";
 import { supabase, isSupabaseConfigured, type Profile } from "@/lib/supabase";
 import type { User, Session } from "@supabase/supabase-js";
-import log from "@/lib/logger";
+import log from "@/utils/logger";
 
 // Shared state across components
 const user = ref<User | null>(null);

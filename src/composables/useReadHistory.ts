@@ -1,7 +1,7 @@
 import { ref, onMounted } from "vue";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { getLocalStorage, setLocalStorage } from "@/lib/utils";
-import log from "@/lib/logger";
+import log from "@/utils/logger";
 
 const STORAGE_KEY = "hackernew-read";
 const MAX_LOCAL_HISTORY = 500;
