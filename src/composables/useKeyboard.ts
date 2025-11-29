@@ -48,6 +48,11 @@ export function useKeyboard(options: KeyboardOptions = {}) {
       return;
     }
 
+    // When help modal is open, only allow ? to toggle it closed
+    if (isHelpModalOpen.value && event.key !== "?") {
+      return;
+    }
+
     switch (event.key.toLowerCase()) {
       case "j":
         event.preventDefault();

@@ -16,21 +16,24 @@ const handleKeyDown = (event: KeyboardEvent) => {
   }
 };
 
+// Manage body scroll lock when modal is open
+const stopWatchingModal = watch(isHelpModalOpen, (open) => {
+  if (open) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+});
+
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
 });
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
-});
-
-// Manage body scroll lock when modal is open
-watch(isHelpModalOpen, (open) => {
-  if (open) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
+  stopWatchingModal();
+  // Ensure body scroll is restored on unmount
+  document.body.style.overflow = "";
 });
 </script>
 
