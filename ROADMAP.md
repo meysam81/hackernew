@@ -167,7 +167,7 @@ What makes HackerNew defensible:
 
 | Feature | Current State | Completion Needed | ICP Served |
 |---------|--------------|-------------------|------------|
-| **Keyboard Help Modal** | `?` key handler exists; shortcut array defined | Build modal UI; wire up display on `?` keypress | Alex, Casey |
+| **Keyboard Help Modal** | Handler and modal UI not yet implemented; shortcut array defined | Implement `?` key handler; build and wire up modal UI | Alex, Casey |
 | **Email Digest** | Database schema has `email_digest` column | Build digest generation service; email integration | Alex, Jordan |
 | **Comment Read Tracking** | `readStories` tracks stories, not individual comments | Extend to track comment IDs; show "new" badge | Jordan |
 
