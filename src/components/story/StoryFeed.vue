@@ -184,6 +184,7 @@ watch(
       <span><kbd>o</kbd> open</span>
       <span><kbd>c</kbd> comments</span>
       <span><kbd>b</kbd> bookmark</span>
+      <span><kbd>?</kbd> help</span>
     </div>
   </div>
 </template>
