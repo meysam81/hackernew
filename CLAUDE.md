@@ -19,6 +19,8 @@ HackerNew is a modern, aesthetically refined reimagining of Hacker News built wi
 | **Bun** | latest | Package manager and runtime |
 | **TypeScript** | 5.7.x | Type safety throughout |
 | **lucide-vue-next** | 0.460.x | Icon library |
+| **loglevel** | 1.9.x | Logging utility |
+| **sharp** | 0.33.x | Image processing |
 
 ## Project Structure
 
@@ -53,10 +55,14 @@ hackernew/
 │   │   ├── show.astro        # Show HN (/show)
 │   │   ├── jobs.astro        # Job posts (/jobs)
 │   │   ├── bookmarks.astro   # User bookmarks (/bookmarks)
+│   │   ├── privacy.astro     # Privacy policy (/privacy)
+│   │   ├── terms.astro       # Terms of service (/terms)
 │   │   ├── 404.astro         # 404 page
 │   │   ├── item/[id].astro   # Story detail page
 │   │   ├── user/[username].astro  # User profile page
-│   │   └── auth/             # Auth pages (signin, callback)
+│   │   └── auth/             # Auth pages
+│   │       ├── signin.astro  # Sign in page (/auth/signin)
+│   │       └── callback.astro # OAuth callback (/auth/callback)
 │   └── styles/
 │       └── global.css        # Design tokens, CSS variables, base styles
 ├── public/                   # Static assets (favicon, og-image)
@@ -67,7 +73,11 @@ hackernew/
 │   └── ci.yml                # GitHub Pages deployment workflow
 ├── astro.config.mjs          # Astro configuration
 ├── tsconfig.json             # TypeScript configuration
-└── package.json              # Dependencies and scripts
+├── package.json              # Dependencies and scripts
+├── ROADMAP.md                # Project roadmap and planned features
+├── LAUNCH.md                 # Launch checklist and notes
+├── SHOW_HN.md                # Show HN submission template
+└── PRODUCT_HUNT.md           # Product Hunt launch materials
 ```
 
 ## Development Commands
@@ -75,6 +85,7 @@ hackernew/
 ```bash
 bun install          # Install dependencies
 bun dev              # Start dev server at localhost:4321
+bun start            # Alias for bun dev
 bun run build        # Type check (astro check) and build for production
 bun run preview      # Preview production build locally
 ```
@@ -165,6 +176,9 @@ export default defineConfig({
   integrations: [vue()],
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: { '@': path.resolve(__dirname, './src') }
+    },
     ssr: { noExternal: ['ky'] }  // Required for Ky compatibility
   }
 });
@@ -224,6 +238,7 @@ export default defineConfig({
 | `src/styles/global.css` | All design tokens and base styles |
 | `src/layouts/BaseLayout.astro` | Main layout with theme initialization |
 | `supabase/schema.sql` | Database schema with RLS policies |
+| `ROADMAP.md` | Planned features and project roadmap |
 
 ## Database Schema (Supabase)
 
