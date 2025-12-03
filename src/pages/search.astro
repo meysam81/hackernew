@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchPage from '../components/search/SearchPage.vue';
+---
+
+<BaseLayout title="Search | HackerNew">
+  <div class="page-header">
+    <h1 class="page-title">Search</h1>
+    <p class="page-description">Search the entire Hacker News archive.</p>
+  </div>
+
+  <SearchPage client:load />
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: var(--spacing-6);
+  }
+
+  .page-title {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-2);
+  }
+
+  .page-description {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin: 0;
+  }
+</style>

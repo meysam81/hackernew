@@ -4,8 +4,10 @@ import type { HNStory, FeedType } from "@/lib/hn-client";
 import { getStories } from "@/lib/hn-client";
 import { useKeyboard } from "@/composables/useKeyboard";
 import { useBookmarks } from "@/composables/useBookmarks";
+import { useModal } from "@/composables/useModal";
 import StoryItem from "./StoryItem.vue";
 import StoryListSkeleton from "./StoryListSkeleton.vue";
+import KeyboardHelpModal from "@/components/ui/KeyboardHelpModal.vue";
 
 interface Props {
   feedType: FeedType;
@@ -27,6 +29,7 @@ const selectedIndex = ref(0);
 const basePath = import.meta.env.BASE_URL || "/";
 
 const { toggleBookmark } = useBookmarks();
+const { toggleKeyboardHelp } = useModal();
 
 const fetchStories = async (page: number = 0) => {
   try {
@@ -118,6 +121,7 @@ useKeyboard({
   onOpen: openSelectedStory,
   onOpenComments: openSelectedComments,
   onBookmark: bookmarkSelected,
+  onShowHelp: toggleKeyboardHelp,
 });
 
 onMounted(() => {
@@ -184,7 +188,11 @@ watch(
       <span><kbd>o</kbd> open</span>
       <span><kbd>c</kbd> comments</span>
       <span><kbd>b</kbd> bookmark</span>
+      <span><kbd>?</kbd> help</span>
     </div>
+
+    <!-- Keyboard Help Modal -->
+    <KeyboardHelpModal />
   </div>
 </template>
 

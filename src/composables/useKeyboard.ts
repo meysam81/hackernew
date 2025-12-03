@@ -7,6 +7,7 @@ interface KeyboardOptions {
   onOpenComments?: () => void;
   onBookmark?: () => void;
   onBack?: () => void;
+  onShowHelp?: () => void;
   enabled?: boolean;
 }
 
@@ -17,6 +18,7 @@ export function useKeyboard(options: KeyboardOptions = {}) {
     onOpenComments,
     onBookmark,
     onBack,
+    onShowHelp,
     enabled = true,
   } = options;
 
@@ -70,7 +72,8 @@ export function useKeyboard(options: KeyboardOptions = {}) {
         onBack?.();
         break;
       case "?":
-        // Show keyboard shortcuts help (could emit event)
+        event.preventDefault();
+        onShowHelp?.();
         break;
       default:
         log.debug(`Unhandled key: ${event.key}`);
