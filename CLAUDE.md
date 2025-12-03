@@ -32,28 +32,33 @@ hackernew/
 │   │   ├── bookmarks/        # BookmarksList.vue
 │   │   ├── comment/          # CommentItem.vue, CommentThread.vue, CommentSkeleton.vue
 │   │   ├── layout/           # Header.astro, Footer.astro
+│   │   ├── search/           # SearchModal.vue, SearchPage.vue, SearchResultItem.vue
 │   │   ├── story/            # StoryFeed.vue, StoryItem.vue, StoryDetail.vue, StoryListSkeleton.vue
-│   │   ├── ui/               # Button.vue, Skeleton.vue, Toast.vue, HeaderActions.vue
+│   │   ├── ui/               # Button.vue, Skeleton.vue, Toast.vue, HeaderActions.vue, KeyboardHelpModal.vue
 │   │   └── user/             # UserProfile.vue
 │   ├── composables/          # Vue composables for shared state
 │   │   ├── useAuth.ts        # Authentication state management
 │   │   ├── useBookmarks.ts   # Local + synced bookmarks
 │   │   ├── useDensity.ts     # Comfortable/compact view modes
 │   │   ├── useKeyboard.ts    # Keyboard navigation handlers
+│   │   ├── useModal.ts       # Shared modal state (keyboard help, search)
 │   │   ├── useReadHistory.ts # Track read stories
 │   │   └── useTheme.ts       # Dark/light mode toggle
 │   ├── layouts/
 │   │   └── BaseLayout.astro  # Main page layout with header/footer
 │   ├── lib/                  # Utilities and API clients
+│   │   ├── algolia-client.ts # Algolia HN Search API client
 │   │   ├── hn-client.ts      # Hacker News API client with caching
 │   │   ├── supabase.ts       # Supabase client setup + types
 │   │   └── utils.ts          # Shared utilities (timeAgo, formatNumber, etc.)
 │   ├── pages/                # Astro pages (file-based routing)
 │   │   ├── index.astro       # Top stories (/)
 │   │   ├── new.astro         # New stories (/new)
+│   │   ├── best.astro        # Best stories (/best)
 │   │   ├── ask.astro         # Ask HN (/ask)
 │   │   ├── show.astro        # Show HN (/show)
 │   │   ├── jobs.astro        # Job posts (/jobs)
+│   │   ├── search.astro      # Search page (/search)
 │   │   ├── bookmarks.astro   # User bookmarks (/bookmarks)
 │   │   ├── privacy.astro     # Privacy policy (/privacy)
 │   │   ├── terms.astro       # Terms of service (/terms)
@@ -126,7 +131,8 @@ Key composables:
 - `useDensity()` - Toggles between `comfortable` and `compact` view densities
 - `useBookmarks()` - Manages bookmarks with local storage + optional Supabase sync
 - `useReadHistory()` - Tracks which stories have been read
-- `useKeyboard()` - Provides keyboard navigation hooks (j/k navigation, o/c/b actions)
+- `useKeyboard()` - Provides keyboard navigation hooks (j/k navigation, o/c/b/? actions)
+- `useModal()` - Shared modal state for keyboard help and search modals
 
 ### HN API Client
 
@@ -142,6 +148,22 @@ Located in `src/lib/hn-client.ts`:
   - `getCommentTree(ids, depth, maxDepth)` - Fetch nested comment tree
   - `getUser(username)` - Fetch user profile
 - Feed types: `top`, `new`, `best`, `ask`, `show`, `job`
+
+### Algolia Search API Client
+
+Located in `src/lib/algolia-client.ts`:
+
+- Uses **Ky** HTTP client with retry logic
+- API base URL: `https://hn.algolia.com/api/v1`
+- No API key required (free public API)
+- Exports typed functions:
+  - `searchHN(options)` - Search stories/comments with filters
+- Search options:
+  - `query` - Search query string
+  - `type` - Filter by type (`all`, `story`, `comment`, `ask_hn`, `show_hn`, `job`)
+  - `dateRange` - Filter by date (`all`, `day`, `week`, `month`, `year`)
+  - `sort` - Sort by `relevance` or `date`
+  - `page`, `hitsPerPage` - Pagination
 
 ### Styling System
 
@@ -233,10 +255,14 @@ export default defineConfig({
 | File | Purpose |
 |------|---------|
 | `src/lib/hn-client.ts` | HN API types and fetching logic |
+| `src/lib/algolia-client.ts` | Algolia HN Search API client |
 | `src/lib/supabase.ts` | Database types and Supabase client |
 | `src/lib/utils.ts` | Common utilities (timeAgo, sanitizeHtml, localStorage helpers) |
 | `src/styles/global.css` | All design tokens and base styles |
 | `src/layouts/BaseLayout.astro` | Main layout with theme initialization |
+| `src/composables/useModal.ts` | Shared modal state management |
+| `src/components/search/SearchModal.vue` | Global search modal (Cmd+K) |
+| `src/components/ui/KeyboardHelpModal.vue` | Keyboard shortcuts help modal |
 | `supabase/schema.sql` | Database schema with RLS policies |
 | `ROADMAP.md` | Planned features and project roadmap |
 
@@ -303,4 +329,7 @@ Currently no automated tests. When adding tests:
 | `o` / `Enter` | Open story link |
 | `c` | Open comments |
 | `b` | Toggle bookmark |
-| `Esc` | Go back |
+| `?` | Show keyboard shortcuts help |
+| `/` | Open search |
+| `Cmd+K` / `Ctrl+K` | Open search |
+| `Esc` | Close modal / Go back |
