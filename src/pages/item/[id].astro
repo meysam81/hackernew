@@ -3,14 +3,37 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import StoryDetail from '../../components/story/StoryDetail.vue';
 
 export function getStaticPaths() {
-  // For static generation, we'll handle this dynamically on client side
-  // This allows the page to work with any story ID
+  // For static generation with dynamic client-side routing
+  // The actual ID is extracted from the URL on the client
   return [{ params: { id: 'placeholder' } }];
 }
 
 const { id } = Astro.params;
+
+// Build appropriate title and description
+// These will be updated client-side once the story loads
+const title = 'Story | HackerNew';
+const description = 'Read and discuss this story on HackerNew - a modern Hacker News experience';
 ---
 
-<BaseLayout title="Story | HackerNew">
+<BaseLayout title={title} description={description}>
   <StoryDetail client:load storyId={id} />
 </BaseLayout>
+
+<style>
+  /* Ensure smooth page transitions */
+  :global(.story-detail) {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
