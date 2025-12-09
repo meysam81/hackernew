@@ -1,11 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import StoryDetail from '../components/story/StoryDetail.vue';
+import UserProfile from '../components/user/UserProfile.vue';
 
 const basePath = import.meta.env.BASE_URL || '/';
 ---
 
-<BaseLayout title="404 - Page Not Found | HackerNew">
-  <div class="error-page">
+<BaseLayout title="HackerNew">
+  <!-- Dynamic route handler - shown when URL matches /item/[id] or /user/[username] -->
+  <div id="dynamic-route-handler" style="display: none;">
+    <div id="story-detail-container" style="display: none;">
+      <StoryDetail client:load storyId="placeholder" />
+    </div>
+    <div id="user-profile-container" style="display: none;">
+      <UserProfile client:load username="placeholder" />
+    </div>
+  </div>
+
+  <!-- Standard 404 content -->
+  <div id="error-page" class="error-page">
     <div class="error-content">
       <h1 class="error-code">404</h1>
       <h2 class="error-title">Page not found</h2>
@@ -18,6 +31,63 @@ const basePath = import.meta.env.BASE_URL || '/';
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  // Handle dynamic routes on GitHub Pages
+  // GitHub Pages serves 404.html for any unknown path
+  // We detect if the path matches a dynamic route and handle it client-side
+
+  function handleDynamicRoute() {
+    const path = window.location.pathname;
+    const basePath = import.meta.env.BASE_URL || '/';
+
+    // Remove base path from the beginning if present
+    const normalizedPath = path.startsWith(basePath)
+      ? path.slice(basePath.length - 1) // Keep leading slash
+      : path;
+
+    // Check for /item/[id] pattern
+    const itemMatch = normalizedPath.match(/^\/item\/(\d+)\/?$/);
+    if (itemMatch) {
+      const storyId = itemMatch[1];
+      document.getElementById('error-page')!.style.display = 'none';
+      document.getElementById('dynamic-route-handler')!.style.display = 'block';
+      document.getElementById('story-detail-container')!.style.display = 'block';
+
+      // Update the page title
+      document.title = `Story ${storyId} | HackerNew`;
+
+      // Dispatch custom event to update the Vue component with the real ID
+      window.dispatchEvent(new CustomEvent('route-param-update', {
+        detail: { type: 'story', id: storyId }
+      }));
+      return true;
+    }
+
+    // Check for /user/[username] pattern
+    const userMatch = normalizedPath.match(/^\/user\/([a-zA-Z0-9_-]+)\/?$/);
+    if (userMatch) {
+      const username = userMatch[1];
+      document.getElementById('error-page')!.style.display = 'none';
+      document.getElementById('dynamic-route-handler')!.style.display = 'block';
+      document.getElementById('user-profile-container')!.style.display = 'block';
+
+      // Update the page title
+      document.title = `${username} | HackerNew`;
+
+      // Dispatch custom event to update the Vue component with the real username
+      window.dispatchEvent(new CustomEvent('route-param-update', {
+        detail: { type: 'user', username: username }
+      }));
+      return true;
+    }
+
+    return false;
+  }
+
+  // Run on page load
+  handleDynamicRoute();
+</script>
 
 <style>
   .error-page {
