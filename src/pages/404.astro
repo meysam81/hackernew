@@ -39,26 +39,46 @@ const basePath = import.meta.env.BASE_URL || '/';
 
   function handleDynamicRoute() {
     const path = window.location.pathname;
+    const basePath = import.meta.env.BASE_URL || '/';
+
+    // Remove base path from the beginning if present
+    const normalizedPath = path.startsWith(basePath)
+      ? path.slice(basePath.length - 1) // Keep leading slash
+      : path;
 
     // Check for /item/[id] pattern
-    const itemMatch = path.match(/^\/item\/(\d+)\/?$/);
+    const itemMatch = normalizedPath.match(/^\/item\/(\d+)\/?$/);
     if (itemMatch) {
       const storyId = itemMatch[1];
       document.getElementById('error-page')!.style.display = 'none';
       document.getElementById('dynamic-route-handler')!.style.display = 'block';
       document.getElementById('story-detail-container')!.style.display = 'block';
+
+      // Update the page title
       document.title = `Story ${storyId} | HackerNew`;
+
+      // Dispatch custom event to update the Vue component with the real ID
+      window.dispatchEvent(new CustomEvent('route-param-update', {
+        detail: { type: 'story', id: storyId }
+      }));
       return true;
     }
 
     // Check for /user/[username] pattern
-    const userMatch = path.match(/^\/user\/([^/]+)\/?$/);
+    const userMatch = normalizedPath.match(/^\/user\/([^/]+)\/?$/);
     if (userMatch) {
       const username = userMatch[1];
       document.getElementById('error-page')!.style.display = 'none';
       document.getElementById('dynamic-route-handler')!.style.display = 'block';
       document.getElementById('user-profile-container')!.style.display = 'block';
+
+      // Update the page title
       document.title = `${username} | HackerNew`;
+
+      // Dispatch custom event to update the Vue component with the real username
+      window.dispatchEvent(new CustomEvent('route-param-update', {
+        detail: { type: 'user', username: username }
+      }));
       return true;
     }
 
@@ -66,8 +86,7 @@ const basePath = import.meta.env.BASE_URL || '/';
   }
 
   // Run on page load
-  window.addEventListener('DOMContentLoaded', handleSPARoute);
-
+  handleDynamicRoute();
 </script>
 
 <style>
