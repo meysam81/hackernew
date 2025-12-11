@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StoryDetail from '../components/story/StoryDetail.vue';
+import UserProfile from '../components/user/UserProfile.vue';
+
+const basePath = import.meta.env.BASE_URL || '/';
+---
+
+<BaseLayout title="HackerNew">
+  <!-- Dynamic route handler - shown when URL matches /item/[id] or /user/[username] -->
+  <div id="dynamic-route-handler" style="display: none;">
+    <div id="story-detail-container" style="display: none;">
+      <StoryDetail client:load storyId="placeholder" />
+    </div>
+    <div id="user-profile-container" style="display: none;">
+      <UserProfile client:load username="placeholder" />
+    </div>
+  </div>
+
+  <!-- Standard 404 content -->
+  <div id="error-page" class="error-page">
+    <div class="error-content">
+      <h1 class="error-code">404</h1>
+      <h2 class="error-title">Page not found</h2>
+      <p class="error-message">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <a href={basePath} class="home-link">
+        ← Back to top stories
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Handle dynamic routes on GitHub Pages
+  // GitHub Pages serves 404.html for any unknown path
+  // We detect if the path matches a dynamic route and handle it client-side
+
+  function handleDynamicRoute() {
+    const path = window.location.pathname;
+
+    // Check for /item/[id] pattern
+    const itemMatch = path.match(/^\/item\/(\d+)\/?$/);
+    if (itemMatch) {
+      const storyId = itemMatch[1];
+      document.getElementById('error-page')!.style.display = 'none';
+      document.getElementById('dynamic-route-handler')!.style.display = 'block';
+      document.getElementById('story-detail-container')!.style.display = 'block';
+      document.title = `Story ${storyId} | HackerNew`;
+      return true;
+    }
+
+    // Check for /user/[username] pattern
+    const userMatch = path.match(/^\/user\/([a-zA-Z0-9_-]+)\/?$/);
+    if (userMatch) {
+      const username = userMatch[1];
+      document.getElementById('error-page')!.style.display = 'none';
+      document.getElementById('dynamic-route-handler')!.style.display = 'block';
+      document.getElementById('user-profile-container')!.style.display = 'block';
+      document.title = `${username} | HackerNew`;
+      return true;
+    }
+
+    return false;
+  }
+
+  // Run on page load
+  handleDynamicRoute();
+</script>
+
+<style>
+  .error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+  }
+
+  .error-content {
+    max-width: 400px;
+  }
+
+  .error-code {
+    font-size: 120px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .error-title {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--spacing-4) 0 var(--spacing-2);
+  }
+
+  .error-message {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin: 0 0 var(--spacing-6);
+  }
+
+  .home-link {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-3) var(--spacing-6);
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: white;
+    background-color: var(--accent);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: background-color var(--transition-fast);
+  }
+
+  .home-link:hover {
+    background-color: var(--accent-hover);
+  }
+</style>
