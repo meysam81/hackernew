@@ -1,86 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import StoryFeed from '../components/story/StoryFeed.vue';
-import StoryDetail from '../components/story/StoryDetail.vue';
-import UserProfile from '../components/user/UserProfile.vue';
-
-const basePath = import.meta.env.BASE_URL || '/';
 ---
 
 <BaseLayout title="Top Stories | HackerNew">
-  <!-- Dynamic route containers (hidden by default, shown via JS) -->
-  <div id="story-detail-container" style="display: none;">
-    <StoryDetail client:load storyId="placeholder" />
-  </div>
-  <div id="user-profile-container" style="display: none;">
-    <UserProfile client:load username="placeholder" />
+  <div class="page-header">
+    <h1 class="page-title">Top Stories</h1>
+    <p class="page-description">The best stories from Hacker News, reimagined.</p>
   </div>
 
-  <!-- 404 error content (shown for unknown routes) -->
-  <div id="error-content" style="display: none;">
-    <div class="error-page">
-      <div class="error-content">
-        <h1 class="error-code">404</h1>
-        <h2 class="error-title">Page not found</h2>
-        <p class="error-message">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <a href={basePath} class="home-link">
-          ← Back to top stories
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Normal homepage content -->
-  <div id="homepage-content">
-    <div class="page-header">
-      <h1 class="page-title">Top Stories</h1>
-      <p class="page-description">The best stories from Hacker News, reimagined.</p>
-    </div>
-
-    <StoryFeed client:load feedType="top" />
-  </div>
+  <StoryFeed client:load feedType="top" />
 </BaseLayout>
-
-<script>
-  // Handle SPA routing after redirect from 404.html
-  // The URL has been restored via history.replaceState, now we need to show the right content
-  function handleSPARoute() {
-    const path = window.location.pathname;
-
-    // If we're on the root path, show homepage
-    if (path === '/' || path === '') {
-      document.getElementById('homepage-content')!.style.display = 'block';
-      return;
-    }
-
-    // Check for /item/[id] pattern
-    const itemMatch = path.match(/^\/item\/(\d+)\/?$/);
-    if (itemMatch) {
-      document.getElementById('homepage-content')!.style.display = 'none';
-      document.getElementById('story-detail-container')!.style.display = 'block';
-      document.title = `Story | HackerNew`;
-      return;
-    }
-
-    // Check for /user/[username] pattern
-    const userMatch = path.match(/^\/user\/([a-zA-Z0-9_-]+)\/?$/);
-    if (userMatch) {
-      document.getElementById('homepage-content')!.style.display = 'none';
-      document.getElementById('user-profile-container')!.style.display = 'block';
-      document.title = `${userMatch[1]} | HackerNew`;
-      return;
-    }
-
-    // Unknown route - show 404 error
-    document.getElementById('homepage-content')!.style.display = 'none';
-    document.getElementById('error-content')!.style.display = 'block';
-    document.title = '404 - Page Not Found | HackerNew';
-  }
-
-  handleSPARoute();
-</script>
 
 <style>
   .page-header {
@@ -98,58 +28,5 @@ const basePath = import.meta.env.BASE_URL || '/';
     font-size: var(--text-base);
     color: var(--text-secondary);
     margin: 0;
-  }
-
-  .error-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
-    text-align: center;
-  }
-
-  .error-content {
-    max-width: 400px;
-  }
-
-  .error-code {
-    font-size: 120px;
-    font-weight: 700;
-    line-height: 1;
-    margin: 0;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .error-title {
-    font-size: var(--text-2xl);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: var(--spacing-4) 0 var(--spacing-2);
-  }
-
-  .error-message {
-    font-size: var(--text-base);
-    color: var(--text-secondary);
-    margin: 0 0 var(--spacing-6);
-  }
-
-  .home-link {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--spacing-3) var(--spacing-6);
-    font-size: var(--text-base);
-    font-weight: 500;
-    color: white;
-    background-color: var(--accent);
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    transition: background-color var(--transition-fast);
-  }
-
-  .home-link:hover {
-    background-color: var(--accent-hover);
   }
 </style>
