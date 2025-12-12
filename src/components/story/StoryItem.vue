@@ -25,7 +25,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: "click", story: HNStory): void;
-  (e: "openComments", story: HNStory): void;
 }>();
 
 const { isBookmarked, toggleBookmark } = useBookmarks();
@@ -49,11 +48,6 @@ const handleBookmarkClick = async (e: Event) => {
   e.preventDefault();
   e.stopPropagation();
   await toggleBookmark(props.story);
-};
-
-const handleCommentsClick = (e: Event) => {
-  e.preventDefault();
-  emit("openComments", props.story);
 };
 </script>
 
@@ -106,7 +100,6 @@ const handleCommentsClick = (e: Event) => {
         <a
           :href="`${basePath}item/${story.id}`"
           class="story-comments"
-          @click="handleCommentsClick"
         >
           <MessageSquare :size="12" />
           {{ pluralize(commentCount, "comment") }}

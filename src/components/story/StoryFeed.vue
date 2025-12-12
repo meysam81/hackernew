@@ -163,9 +163,6 @@ watch(
             :story="story"
             :rank="index + 1"
             @click="() => {}"
-            @open-comments="
-              () => (window.location.href = `${basePath}item/${story.id}`)
-            "
           />
         </div>
       </div>
