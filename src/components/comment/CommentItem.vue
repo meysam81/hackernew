@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, inject, type Ref, type ComputedRef } from "vue";
 import { ChevronDown, ChevronRight, MessageSquare } from "lucide-vue-next";
 import type { HNComment } from "@/lib/hn-client";
 import { timeAgo, formatDate, sanitizeHtml } from "@/lib/utils";
@@ -13,14 +13,22 @@ interface Props {
   depth?: number;
   maxDepth?: number;
   highlightAuthor?: string;
+  flatIndex?: number;
+  selectedIndex?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   depth: 0,
   maxDepth: 10,
+  flatIndex: -1,
+  selectedIndex: -1,
 });
 
-const collapsed = ref(false);
+// Inject from parent CommentThread
+const selectedCommentId = inject<ComputedRef<number | null>>("selectedCommentId", computed(() => null));
+const collapsedIds = inject<Ref<Set<number>>>("collapsedIds", ref(new Set()));
+const toggleCollapseFromParent = inject<(id?: number) => void>("toggleCollapse", () => {});
+
 const basePath = import.meta.env.BASE_URL || "/";
 
 const timeAgoStr = computed(() => timeAgo(props.comment.time));
@@ -32,6 +40,23 @@ const isHighlighted = computed(
 );
 const indentClass = computed(() => `depth-${Math.min(props.depth, 8)}`);
 
+// Check if this comment is selected via keyboard navigation
+const isSelected = computed(() => selectedCommentId.value === props.comment.id);
+
+// Check if collapsed via parent state
+const collapsed = computed(() => collapsedIds.value.has(props.comment.id));
+
+// Calculate flat indices for nested comments
+const getNestedFlatIndex = (replyIndex: number): number => {
+  if (props.flatIndex === -1) return -1;
+
+  let index = props.flatIndex + 1; // Start after current comment
+  for (let i = 0; i < replyIndex; i++) {
+    index += 1 + countAllReplies(props.comment.replies[i]);
+  }
+  return index;
+};
+
 function countReplies(comment: CommentWithReplies): number {
   let count = comment.replies.length;
   for (const reply of comment.replies) {
@@ -40,15 +65,26 @@ function countReplies(comment: CommentWithReplies): number {
   return count;
 }
 
+function countAllReplies(comment: CommentWithReplies): number {
+  if (collapsedIds.value.has(comment.id)) return 0;
+  let count = comment.replies.length;
+  for (const reply of comment.replies) {
+    count += countAllReplies(reply);
+  }
+  return count;
+}
+
 const toggleCollapse = () => {
-  collapsed.value = !collapsed.value;
+  toggleCollapseFromParent(props.comment.id);
 };
 </script>
 
 <template>
   <div
     class="comment-item"
-    :class="[indentClass, { highlighted: isHighlighted }]"
+    :class="[indentClass, { highlighted: isHighlighted, selected: isSelected }]"
+    :data-comment-index="flatIndex"
+    :data-comment-id="comment.id"
   >
     <div class="comment-collapse-line" @click="toggleCollapse">
       <div class="collapse-indicator">
@@ -87,12 +123,14 @@ const toggleCollapse = () => {
         class="comment-replies"
       >
         <CommentItem
-          v-for="reply in comment.replies"
+          v-for="(reply, replyIdx) in comment.replies"
           :key="reply.id"
           :comment="reply"
           :depth="depth + 1"
           :max-depth="maxDepth"
           :highlight-author="highlightAuthor"
+          :flat-index="getNestedFlatIndex(replyIdx)"
+          :selected-index="selectedIndex"
         />
       </div>
 
@@ -119,6 +157,20 @@ const toggleCollapse = () => {
   margin: 0 calc(-1 * var(--spacing-2));
   padding: var(--spacing-2);
   border-radius: var(--radius-sm);
+}
+
+.comment-item.selected {
+  background-color: var(--bg-tertiary);
+  margin: 0 calc(-1 * var(--spacing-2));
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.comment-item.selected.highlighted {
+  background-color: var(--accent-muted);
+  outline-color: var(--accent-hover);
 }
 
 /* Indentation levels */
