@@ -37,7 +37,7 @@ These platforms reach the exact target audience - developers who actively use Ha
 | **awesome-hacker-news** | https://github.com/cheeaun/awesome-hacker-news | **CRITICAL** - Curated list of HN apps/clients |
 | awesome-vue | https://github.com/vuejs/awesome-vue | Vue 3 projects showcase |
 | awesome-astro | https://github.com/one-aalam/awesome-astro | Astro framework projects |
-| awesome-pwa | https://github.com/nicolo-ribaudo/awesome-pwa | If PWA features added |
+| awesome-pwa | https://github.com/hemanth/awesome-pwa | If PWA features added |
 
 **Action:** Submit pull requests following each repo's contribution guidelines.
 
