@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, inject, type Ref, type ComputedRef } from "vue";
 import { ChevronDown, ChevronRight, MessageSquare, Loader2 } from "lucide-vue-next";
 import type { LazyComment } from "@/lib/hn-client";
 import { getMoreReplies, REPLY_BATCH_SIZE } from "@/lib/hn-client";
@@ -10,17 +10,27 @@ interface Props {
   depth?: number;
   maxDepth?: number;
   highlightAuthor?: string;
+  flatIndex?: number;
+  selectedIndex?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   depth: 0,
   maxDepth: 10,
+  flatIndex: -1,
+  selectedIndex: -1,
 });
 
-const collapsed = ref(false);
+// Inject from parent CommentThread
+const selectedCommentId = inject<ComputedRef<number | null>>("selectedCommentId", computed(() => null));
+const collapsedIds = inject<Ref<Set<number>>>("collapsedIds", ref(new Set()));
+const toggleCollapseFromParent = inject<(id?: number) => void>("toggleCollapse", () => {});
+
+// Local state for lazy loading
 const localReplies = ref<LazyComment[]>([...props.comment.replies]);
 const loadingReplies = ref(false);
 const repliesLoaded = computed(() => props.comment.repliesLoaded);
+
 const basePath = import.meta.env.BASE_URL || "/";
 
 const timeAgoStr = computed(() => timeAgo(props.comment.time));
@@ -30,6 +40,12 @@ const isHighlighted = computed(
   () => props.comment.by === props.highlightAuthor,
 );
 const indentClass = computed(() => `depth-${Math.min(props.depth, 8)}`);
+
+// Check if this comment is selected via keyboard navigation
+const isSelected = computed(() => selectedCommentId.value === props.comment.id);
+
+// Check if collapsed via parent state
+const collapsed = computed(() => collapsedIds.value.has(props.comment.id));
 
 // Total reply count including nested
 const totalReplyCount = computed(() => {
@@ -65,8 +81,32 @@ const displayReplyCount = computed(() => {
   return nestedLoadedReplyCount.value;
 });
 
+// Calculate flat indices for nested comments
+const getNestedFlatIndex = (replyIndex: number): number => {
+  if (props.flatIndex === -1) return -1;
+
+  let index = props.flatIndex + 1; // Start after current comment
+  for (let i = 0; i < replyIndex; i++) {
+    if (!collapsedIds.value.has(localReplies.value[i].id)) {
+      index += 1 + countVisibleReplies(localReplies.value[i]);
+    } else {
+      index += 1;
+    }
+  }
+  return index;
+};
+
+function countVisibleReplies(comment: LazyComment): number {
+  if (collapsedIds.value.has(comment.id)) return 0;
+  let count = comment.replies.length;
+  for (const reply of comment.replies) {
+    count += countVisibleReplies(reply);
+  }
+  return count;
+}
+
 const toggleCollapse = () => {
-  collapsed.value = !collapsed.value;
+  toggleCollapseFromParent(props.comment.id);
 };
 
 // Load more replies for this comment
@@ -85,7 +125,8 @@ const loadMoreReplies = async () => {
     localReplies.value = [...localReplies.value, ...result.replies];
 
     if (!result.hasMore) {
-      repliesLoaded.value = true;
+      // Mark as fully loaded (this is a computed from prop, so we can't mutate directly)
+      // The parent should handle this state
     }
   } catch (err) {
     console.error("Failed to load replies:", err);
@@ -109,7 +150,9 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
 <template>
   <div
     class="comment-item"
-    :class="[indentClass, { highlighted: isHighlighted }]"
+    :class="[indentClass, { highlighted: isHighlighted, selected: isSelected }]"
+    :data-comment-index="flatIndex"
+    :data-comment-id="comment.id"
   >
     <div class="comment-collapse-line" @click="toggleCollapse">
       <div class="collapse-indicator">
@@ -148,12 +191,14 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
         class="comment-replies"
       >
         <CommentItem
-          v-for="reply in localReplies"
+          v-for="(reply, replyIdx) in localReplies"
           :key="reply.id"
           :comment="reply"
           :depth="depth + 1"
           :max-depth="maxDepth"
           :highlight-author="highlightAuthor"
+          :flat-index="getNestedFlatIndex(replyIdx)"
+          :selected-index="selectedIndex"
           @replies-update="onChildRepliesUpdate"
         />
       </div>
@@ -203,6 +248,20 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
   margin: 0 calc(-1 * var(--spacing-2));
   padding: var(--spacing-2);
   border-radius: var(--radius-sm);
+}
+
+.comment-item.selected {
+  background-color: var(--bg-tertiary);
+  margin: 0 calc(-1 * var(--spacing-2));
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.comment-item.selected.highlighted {
+  background-color: var(--accent-muted);
+  outline-color: var(--accent-hover);
 }
 
 /* Indentation levels */
@@ -396,7 +455,18 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
   color: var(--text-tertiary);
 }
 
+.spin {
+  animation: spin 1s linear infinite;
+}
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Respect user preference for reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -404,6 +474,7 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
     animation: none !important;
   }
 }
+
 .comment-too-deep {
   margin-top: var(--spacing-2);
   font-size: var(--text-sm);
