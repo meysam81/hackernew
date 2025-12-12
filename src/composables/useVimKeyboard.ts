@@ -1,4 +1,4 @@
-import { ref, computed, onMounted, onUnmounted, readonly } from "vue";
+import { ref, computed, onMounted, onUnmounted, readonly, shallowRef } from "vue";
 import log from "@/utils/logger";
 
 // ============================================================================
@@ -66,16 +66,23 @@ interface KeySequence {
 }
 
 // ============================================================================
-// Shared State (Module Level)
+// Shared State (Module Level) - Client-only
 // ============================================================================
 
-const keySequence = ref<KeySequence>({
+// Use shallowRef to avoid deep reactivity on timeout
+const keySequence = shallowRef<KeySequence>({
   prefix: null,
   count: 0,
   timeout: null,
 });
 
+// Track if we're on client side
+const isClient = typeof window !== "undefined";
+
 const pendingDisplay = computed(() => {
+  // Always return empty string on server to avoid hydration mismatch
+  if (!isClient) return "";
+
   const seq = keySequence.value;
   let display = "";
   if (seq.count > 0) display += seq.count;
@@ -90,8 +97,11 @@ const SEQUENCE_TIMEOUT = 1000; // 1 second timeout for key sequences
 // ============================================================================
 
 function clearSequence() {
-  if (keySequence.value.timeout) {
-    clearTimeout(keySequence.value.timeout);
+  if (!isClient) return;
+
+  const current = keySequence.value;
+  if (current.timeout) {
+    clearTimeout(current.timeout);
   }
   keySequence.value = {
     prefix: null,
@@ -100,34 +110,56 @@ function clearSequence() {
   };
 }
 
-function setSequenceTimeout() {
-  if (keySequence.value.timeout) {
-    clearTimeout(keySequence.value.timeout);
-  }
-  keySequence.value.timeout = setTimeout(() => {
-    log.debug("Key sequence timeout, clearing");
-    clearSequence();
-  }, SEQUENCE_TIMEOUT);
-}
-
 function addToCount(digit: number) {
+  if (!isClient) return false;
+
+  const current = keySequence.value;
   // Prevent leading zeros from being meaningful
-  if (keySequence.value.count === 0 && digit === 0) {
+  if (current.count === 0 && digit === 0) {
     return false;
   }
   // Cap at reasonable number to prevent overflow
-  const newCount = keySequence.value.count * 10 + digit;
+  const newCount = current.count * 10 + digit;
   if (newCount > 999) {
     return false;
   }
-  keySequence.value.count = newCount;
-  setSequenceTimeout();
+
+  // Clear existing timeout
+  if (current.timeout) {
+    clearTimeout(current.timeout);
+  }
+
+  const newTimeout = setTimeout(() => {
+    log.debug("Key sequence timeout, clearing");
+    clearSequence();
+  }, SEQUENCE_TIMEOUT);
+
+  keySequence.value = {
+    ...current,
+    count: newCount,
+    timeout: newTimeout,
+  };
   return true;
 }
 
 function setPrefix(prefix: string) {
-  keySequence.value.prefix = prefix;
-  setSequenceTimeout();
+  if (!isClient) return;
+
+  const current = keySequence.value;
+  if (current.timeout) {
+    clearTimeout(current.timeout);
+  }
+
+  const newTimeout = setTimeout(() => {
+    log.debug("Key sequence timeout, clearing");
+    clearSequence();
+  }, SEQUENCE_TIMEOUT);
+
+  keySequence.value = {
+    ...current,
+    prefix,
+    timeout: newTimeout,
+  };
 }
 
 function getCountOrDefault(defaultCount: number = 1): number {
@@ -599,12 +631,16 @@ export function useVimKeyboard(options: VimKeyboardOptions = {}) {
   };
 
   onMounted(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    if (isClient) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
   });
 
   onUnmounted(() => {
-    window.removeEventListener("keydown", handleKeyDown);
-    clearSequence();
+    if (isClient) {
+      window.removeEventListener("keydown", handleKeyDown);
+      clearSequence();
+    }
   });
 
   return {
