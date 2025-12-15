@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { ChevronDown, ChevronRight, MessageSquare } from "lucide-vue-next";
-import type { HNComment } from "@/lib/hn-client";
+import { ChevronDown, ChevronRight, MessageSquare, Loader2 } from "lucide-vue-next";
+import type { LazyComment } from "@/lib/hn-client";
+import { getMoreReplies, REPLY_BATCH_SIZE } from "@/lib/hn-client";
 import { timeAgo, formatDate, sanitizeHtml } from "@/lib/utils";
 
-interface CommentWithReplies extends HNComment {
-  replies: CommentWithReplies[];
-}
-
 interface Props {
-  comment: CommentWithReplies;
+  comment: LazyComment;
   depth?: number;
   maxDepth?: number;
   highlightAuthor?: string;
@@ -21,27 +18,88 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const collapsed = ref(false);
+const localReplies = ref<LazyComment[]>([...props.comment.replies]);
+const loadingReplies = ref(false);
+const repliesLoaded = ref(props.comment.repliesLoaded);
 const basePath = import.meta.env.BASE_URL || "/";
 
 const timeAgoStr = computed(() => timeAgo(props.comment.time));
 const formattedDate = computed(() => formatDate(props.comment.time));
 const sanitizedText = computed(() => sanitizeHtml(props.comment.text || ""));
-const replyCount = computed(() => countReplies(props.comment));
 const isHighlighted = computed(
   () => props.comment.by === props.highlightAuthor,
 );
 const indentClass = computed(() => `depth-${Math.min(props.depth, 8)}`);
 
-function countReplies(comment: CommentWithReplies): number {
-  let count = comment.replies.length;
-  for (const reply of comment.replies) {
-    count += countReplies(reply);
+// Total reply count including nested
+const totalReplyCount = computed(() => {
+  return props.comment.replyIds.length;
+});
+
+// How many replies are currently loaded
+const loadedReplyCount = computed(() => localReplies.value.length);
+
+// How many more replies can be loaded
+const remainingReplies = computed(() => {
+  return Math.max(0, totalReplyCount.value - loadedReplyCount.value);
+});
+
+// Recursively count all nested replies (for collapse indicator)
+function countAllReplies(replies: LazyComment[]): number {
+  let count = replies.length;
+  for (const reply of replies) {
+    count += countAllReplies(reply.replies);
   }
   return count;
 }
 
+const displayReplyCount = computed(() => {
+  // When collapsed, show total potential replies
+  if (collapsed.value) {
+    return totalReplyCount.value;
+  }
+  // Otherwise show loaded nested count
+  return countAllReplies(localReplies.value);
+});
+
 const toggleCollapse = () => {
   collapsed.value = !collapsed.value;
+};
+
+// Load more replies for this comment
+const loadMoreReplies = async () => {
+  if (loadingReplies.value) return;
+
+  try {
+    loadingReplies.value = true;
+
+    const result = await getMoreReplies(
+      props.comment.replyIds,
+      loadedReplyCount.value,
+      REPLY_BATCH_SIZE
+    );
+
+    localReplies.value = [...localReplies.value, ...result.replies];
+
+    if (!result.hasMore) {
+      repliesLoaded.value = true;
+    }
+  } catch (err) {
+    console.error("Failed to load replies:", err);
+  } finally {
+    loadingReplies.value = false;
+  }
+};
+
+// Handle child comment loading more of its replies
+const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
+  const index = localReplies.value.findIndex((r) => r.id === childId);
+  if (index !== -1) {
+    localReplies.value[index] = {
+      ...localReplies.value[index],
+      replies: newReplies,
+    };
+  }
 };
 </script>
 
@@ -66,11 +124,11 @@ const toggleCollapse = () => {
           {{ timeAgoStr }}
         </span>
         <button
-          v-if="comment.replies.length > 0"
+          v-if="totalReplyCount > 0"
           class="collapse-btn"
           @click="toggleCollapse"
         >
-          {{ collapsed ? `[+${replyCount}]` : "[-]" }}
+          {{ collapsed ? `[+${displayReplyCount}]` : "[-]" }}
         </button>
       </div>
 
@@ -78,27 +136,50 @@ const toggleCollapse = () => {
 
       <div v-if="collapsed" class="comment-collapsed-summary">
         <MessageSquare :size="12" />
-        {{ replyCount }} {{ replyCount === 1 ? "reply" : "replies" }} hidden
+        {{ displayReplyCount }} {{ displayReplyCount === 1 ? "reply" : "replies" }} hidden
       </div>
 
       <!-- Nested replies -->
       <div
-        v-if="!collapsed && comment.replies.length > 0 && depth < maxDepth"
+        v-if="!collapsed && localReplies.length > 0 && depth < maxDepth"
         class="comment-replies"
       >
         <CommentItem
-          v-for="reply in comment.replies"
+          v-for="reply in localReplies"
           :key="reply.id"
           :comment="reply"
           :depth="depth + 1"
           :max-depth="maxDepth"
           :highlight-author="highlightAuthor"
+          @replies-update="onChildRepliesUpdate"
         />
+      </div>
+
+      <!-- Load more replies button -->
+      <div
+        v-if="!collapsed && remainingReplies > 0 && depth < maxDepth"
+        class="load-more-replies"
+      >
+        <button
+          v-if="!loadingReplies"
+          class="load-replies-btn"
+          @click="loadMoreReplies"
+        >
+          Load {{ Math.min(remainingReplies, REPLY_BATCH_SIZE) }} more
+          {{ remainingReplies === 1 ? "reply" : "replies" }}
+          <span v-if="remainingReplies > REPLY_BATCH_SIZE" class="remaining-hint">
+            ({{ remainingReplies }} total)
+          </span>
+        </button>
+        <div v-else class="loading-replies">
+          <Loader2 :size="14" class="spin" />
+          <span>Loading replies...</span>
+        </div>
       </div>
 
       <!-- Too deep indicator -->
       <div
-        v-if="!collapsed && comment.replies.length > 0 && depth >= maxDepth"
+        v-if="!collapsed && totalReplyCount > 0 && depth >= maxDepth"
         class="comment-too-deep"
       >
         <a :href="`${basePath}item/${comment.id}`"> Continue thread → </a>
@@ -275,6 +356,54 @@ const toggleCollapse = () => {
   margin-top: var(--spacing-2);
   border-left: 1px solid var(--border-subtle);
   padding-left: var(--spacing-2);
+}
+
+.load-more-replies {
+  margin-top: var(--spacing-2);
+  padding-left: var(--spacing-2);
+}
+
+.load-replies-btn {
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--accent);
+  background: none;
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.load-replies-btn:hover {
+  background-color: var(--accent-muted);
+  border-style: solid;
+}
+
+.remaining-hint {
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.loading-replies {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .comment-too-deep {

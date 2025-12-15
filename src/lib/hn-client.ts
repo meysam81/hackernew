@@ -187,6 +187,131 @@ export async function getCommentTree(
   return commentsWithReplies;
 }
 
+// Progressive comment loading types
+export interface LazyComment extends HNComment {
+  replies: LazyComment[];
+  replyIds: number[];
+  repliesLoaded: boolean;
+  hasMoreReplies: boolean;
+}
+
+// Batch size constants for progressive loading
+export const COMMENT_BATCH_SIZE = 20;
+export const REPLY_BATCH_SIZE = 10;
+
+/**
+ * Fetch a batch of top-level comments with their immediate first-level replies
+ * This enables progressive loading - showing comments as they load
+ */
+export async function getCommentBatch(
+  commentIds: number[],
+  offset: number = 0,
+  limit: number = COMMENT_BATCH_SIZE,
+): Promise<{ comments: LazyComment[]; hasMore: boolean; total: number }> {
+  const total = commentIds.length;
+  const slicedIds = commentIds.slice(offset, offset + limit);
+
+  if (slicedIds.length === 0) {
+    return { comments: [], hasMore: false, total };
+  }
+
+  // Fetch comments in parallel
+  const rawComments = await Promise.all(slicedIds.map((id) => getComment(id)));
+
+  const validComments = rawComments.filter(
+    (c): c is HNComment => c !== null && !c.deleted && !c.dead,
+  );
+
+  // For each comment, fetch only the first few replies (shallow)
+  const commentsWithShallowReplies = await Promise.all(
+    validComments.map(async (comment) => {
+      const replyIds = comment.kids || [];
+      const initialReplyIds = replyIds.slice(0, REPLY_BATCH_SIZE);
+
+      let replies: LazyComment[] = [];
+      if (initialReplyIds.length > 0) {
+        const rawReplies = await Promise.all(
+          initialReplyIds.map((id) => getComment(id)),
+        );
+        replies = rawReplies
+          .filter((r): r is HNComment => r !== null && !r.deleted && !r.dead)
+          .map((reply) => ({
+            ...reply,
+            replies: [],
+            replyIds: reply.kids || [],
+            repliesLoaded: false,
+            hasMoreReplies: (reply.kids || []).length > 0,
+          }));
+      }
+
+      return {
+        ...comment,
+        replies,
+        replyIds,
+        repliesLoaded: replyIds.length <= REPLY_BATCH_SIZE,
+        hasMoreReplies: replyIds.length > REPLY_BATCH_SIZE,
+      } as LazyComment;
+    }),
+  );
+
+  return {
+    comments: commentsWithShallowReplies,
+    hasMore: offset + limit < total,
+    total,
+  };
+}
+
+/**
+ * Fetch more replies for a specific comment
+ * Used for lazy-loading nested replies when user expands a comment
+ */
+export async function getMoreReplies(
+  replyIds: number[],
+  offset: number = 0,
+  limit: number = REPLY_BATCH_SIZE,
+): Promise<{ replies: LazyComment[]; hasMore: boolean }> {
+  const slicedIds = replyIds.slice(offset, offset + limit);
+
+  if (slicedIds.length === 0) {
+    return { replies: [], hasMore: false };
+  }
+
+  const rawReplies = await Promise.all(slicedIds.map((id) => getComment(id)));
+
+  const replies = rawReplies
+    .filter((r): r is HNComment => r !== null && !r.deleted && !r.dead)
+    .map((reply) => ({
+      ...reply,
+      replies: [],
+      replyIds: reply.kids || [],
+      repliesLoaded: false,
+      hasMoreReplies: (reply.kids || []).length > 0,
+    }));
+
+  return {
+    replies,
+    hasMore: offset + limit < replyIds.length,
+  };
+}
+
+/**
+ * Fetch a single comment with metadata for lazy loading
+ */
+export async function getLazyComment(id: number): Promise<LazyComment | null> {
+  const comment = await getComment(id);
+  if (!comment || comment.deleted || comment.dead) {
+    return null;
+  }
+
+  return {
+    ...comment,
+    replies: [],
+    replyIds: comment.kids || [],
+    repliesLoaded: false,
+    hasMoreReplies: (comment.kids || []).length > 0,
+  };
+}
+
 // Utility functions
 export function getDomain(url?: string): string {
   if (!url) {
