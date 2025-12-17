@@ -104,8 +104,13 @@ onUnmounted(() => {
 
 // Watch for the trigger element to be available
 const onTriggerRef = (el: HTMLElement | null) => {
+  // Disconnect previous observer if it exists
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
   loadMoreTrigger.value = el;
-  if (el && !observer) {
+  if (el) {
     setupIntersectionObserver();
   }
 };
@@ -159,7 +164,7 @@ const onTriggerRef = (el: HTMLElement | null) => {
         >
           Load more comments ({{ totalComments - loadedCount }} remaining)
         </button>
-        <div v-else class="loading-more">
+        <div v-else class="loading-more" aria-live="polite">
           <Loader2 :size="16" class="spin" />
           <span>Loading more comments...</span>
         </div>
@@ -266,6 +271,12 @@ const onTriggerRef = (el: HTMLElement | null) => {
   }
   to {
     transform: rotate(360deg);
+  }
+  }
+
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+  animation: none !important;
   }
 }
 

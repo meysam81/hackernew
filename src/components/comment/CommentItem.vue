@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 const collapsed = ref(false);
 const localReplies = ref<LazyComment[]>([...props.comment.replies]);
 const loadingReplies = ref(false);
-const repliesLoaded = ref(props.comment.repliesLoaded);
+const repliesLoaded = computed(() => props.comment.repliesLoaded);
 const basePath = import.meta.env.BASE_URL || "/";
 
 const timeAgoStr = computed(() => timeAgo(props.comment.time));
@@ -53,13 +53,16 @@ function countAllReplies(replies: LazyComment[]): number {
   return count;
 }
 
+// Memoized nested loaded reply count
+const nestedLoadedReplyCount = computed(() => countAllReplies(localReplies.value));
+
 const displayReplyCount = computed(() => {
   // When collapsed, show total potential replies
   if (collapsed.value) {
     return totalReplyCount.value;
   }
   // Otherwise show loaded nested count
-  return countAllReplies(localReplies.value);
+  return nestedLoadedReplyCount.value;
 });
 
 const toggleCollapse = () => {
@@ -171,7 +174,7 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
             ({{ remainingReplies }} total)
           </span>
         </button>
-        <div v-else class="loading-replies">
+        <div v-else class="loading-replies" aria-live="polite">
           <Loader2 :size="14" class="spin" />
           <span>Loading replies...</span>
         </div>
@@ -393,19 +396,14 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
   color: var(--text-tertiary);
 }
 
-.spin {
-  animation: spin 1s linear infinite;
-}
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none !important;
   }
 }
-
 .comment-too-deep {
   margin-top: var(--spacing-2);
   font-size: var(--text-sm);
