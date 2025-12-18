@@ -2,11 +2,14 @@
 import { useTheme } from "@/composables/useTheme";
 import { useDensity } from "@/composables/useDensity";
 import { useAuth } from "@/composables/useAuth";
-import { Sun, Moon, Rows3, Rows4, User, LogOut } from "lucide-vue-next";
+import { useModal } from "@/composables/useModal";
+import { Sun, Moon, Rows3, Rows4, User, LogOut, Search } from "lucide-vue-next";
+import SearchModal from "@/components/search/SearchModal.vue";
 
 const { resolvedTheme, toggleTheme } = useTheme();
 const { density, toggleDensity } = useDensity();
 const { user, loading, signOut, isConfigured } = useAuth();
+const { showSearchModal } = useModal();
 
 const basePath = import.meta.env.BASE_URL || "/";
 
@@ -18,6 +21,15 @@ const handleSignOut = async () => {
 
 <template>
   <div class="header-actions">
+    <!-- Search -->
+    <button
+      class="icon-btn search-btn"
+      title="Search (Cmd+K)"
+      @click="showSearchModal"
+    >
+      <Search :size="18" />
+    </button>
+
     <!-- Density Toggle -->
     <button
       class="icon-btn"
@@ -68,6 +80,9 @@ const handleSignOut = async () => {
         <a :href="`${basePath}auth/signin`" class="auth-btn"> Sign in </a>
       </template>
     </template>
+
+    <!-- Search Modal -->
+    <SearchModal />
   </div>
 </template>
 
@@ -104,6 +119,14 @@ const handleSignOut = async () => {
 .icon-btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+.search-btn {
+  border: 1px solid var(--border-default);
+}
+
+.search-btn:hover {
+  border-color: var(--text-tertiary);
 }
 
 .user-menu {
