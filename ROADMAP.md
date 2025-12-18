@@ -160,28 +160,28 @@ What makes HackerNew defensible:
 
 ### Fully Implemented ✅
 
-| Feature                     | Implementation                                                       | ICP Served    |
-| --------------------------- | -------------------------------------------------------------------- | ------------- |
-| **Dark/Light Mode**         | System preference + manual toggle; CSS variables; smooth transitions | All           |
-| **Vim Keyboard Navigation** | j/k (navigate), o (open), c (comments), b (bookmark), Esc (back)     | Alex, Casey   |
-| **Bookmarks**               | Local storage + optional Supabase sync; bookmark list page           | Alex, Sam     |
-| **Reading History**         | Tracks read stories; 500-item local cap; optional cloud sync         | Alex, Jordan  |
-| **Density Toggle**          | Comfortable/Compact modes; persisted preference                      | Alex, Sam     |
-| **All Feed Types**          | Top, New, Best, Ask, Show, Jobs with pagination                      | All           |
-| **User Profiles**           | View any HN user's karma, about, and submissions                     | Jordan        |
-| **Threaded Comments**       | Nested display with collapse/expand; depth limiting                  | Jordan, Casey |
-| **OAuth Authentication**    | GitHub and Google via Supabase; optional                             | Alex, Sam     |
-| **Loading Skeletons**       | Story list and comment skeletons for perceived performance           | All           |
-| **API Caching**             | 5-minute in-memory cache for HN API requests                         | All           |
-| **Mobile Responsive**       | Tailwind breakpoints; touch-friendly on small screens                | Sam           |
+| Feature | Implementation | ICP Served |
+|---------|---------------|------------|
+| **Dark/Light Mode** | System preference + manual toggle; CSS variables; smooth transitions | All |
+| **Vim Keyboard Navigation** | j/k (navigate), o (open), c (comments), b (bookmark), Esc (back) | Alex, Casey |
+| **Bookmarks** | Local storage + optional Supabase sync; bookmark list page | Alex, Sam |
+| **Reading History** | Tracks read stories; 500-item local cap; optional cloud sync | Alex, Jordan |
+| **Density Toggle** | Comfortable/Compact modes; persisted preference | Alex, Sam |
+| **All Feed Types** | Top, New, Best, Ask, Show, Jobs with pagination | All |
+| **User Profiles** | View any HN user's karma, about, and submissions | Jordan |
+| **Threaded Comments** | Nested display with collapse/expand; depth limiting | Jordan, Casey |
+| **OAuth Authentication** | GitHub and Google via Supabase; optional | Alex, Sam |
+| **Loading Skeletons** | Story list and comment skeletons for perceived performance | All |
+| **API Caching** | 5-minute in-memory cache for HN API requests | All |
+| **Mobile Responsive** | Tailwind breakpoints; touch-friendly on small screens | Sam |
+| **Keyboard Help Modal** | Press `?` to toggle modal; shows all shortcuts in grid layout; closes with Esc or click outside | Alex, Casey |
 
 ### Partially Implemented ⚠️
 
-| Feature                   | Current State                                                    | Completion Needed                                     | ICP Served   |
-| ------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------- | ------------ |
-| **Keyboard Help Modal**   | Handler and modal UI not yet implemented; shortcut array defined | Implement `?` key handler; build and wire up modal UI | Alex, Casey  |
-| **Email Digest**          | Database schema has `email_digest` column                        | Build digest generation service; email integration    | Alex, Jordan |
-| **Comment Read Tracking** | `readStories` tracks stories, not individual comments            | Extend to track comment IDs; show "new" badge         | Jordan       |
+| Feature | Current State | Completion Needed | ICP Served |
+|---------|--------------|-------------------|------------|
+| **Email Digest** | Database schema has `email_digest` column | Build digest generation service; email integration | Alex, Jordan |
+| **Comment Read Tracking** | `readStories` tracks stories, not individual comments | Extend to track comment IDs; show "new" badge | Jordan |
 
 ### Not Yet Implemented 📋
 
@@ -223,13 +223,13 @@ Features from ideation that have no code implementation yet. These are candidate
 
 **Target ICPs**: Alex (Daily Reader), Sam (Mobile Commuter)
 
-| Priority | Feature                   | Score | Effort | Status  | Notes                                     |
-| -------- | ------------------------- | ----- | ------ | ------- | ----------------------------------------- |
-| **P0**   | Algolia Search with Cmd+K | 9.5   | M      | Planned | #1 requested feature; Algolia API is free |
-| **P0**   | Keyboard Help Modal       | 9.2   | XS     | Partial | Shortcut array exists; just need modal UI |
-| **P1**   | Extended Vim Navigation   | 8.8   | S      | Planned | gg/G, numbers, [/], etc.                  |
-| **P1**   | Auto-Refresh Badge        | 8.0   | S      | Planned | "5 new stories" non-intrusive indicator   |
-| **P2**   | Night Owl Auto-Theming    | 6.5   | XS     | Planned | Schedule-based dark mode                  |
+| Priority | Feature | Score | Effort | Status | Notes |
+|----------|---------|-------|--------|--------|-------|
+| **P0** | Algolia Search with Cmd+K | 9.5 | M | Planned | #1 requested feature; Algolia API is free |
+| **P0** | Keyboard Help Modal | 9.2 | XS | Complete | Press `?` to toggle; grid layout; Esc to close |
+| **P1** | Extended Vim Navigation | 8.8 | S | Planned | gg/G, numbers, [/], etc. |
+| **P1** | Auto-Refresh Badge | 8.0 | S | Planned | "5 new stories" non-intrusive indicator |
+| **P2** | Night Owl Auto-Theming | 6.5 | XS | Planned | Schedule-based dark mode |
 
 ---
 
@@ -335,7 +335,7 @@ Features from ideation that have no code implementation yet. These are candidate
 
 #### Keyboard Help Modal
 
-**Score**: 9.2/10
+**Score**: 9.2/10 — **COMPLETE**
 
 **Why it matters**: Keyboard shortcuts are powerful but invisible. Users won't discover them without explicit help. This is a low-effort, high-impact completion of existing partial work.
 
@@ -345,20 +345,16 @@ Features from ideation that have no code implementation yet. These are candidate
 | XS effort for immediate value         | None significant           |
 | Establishes pattern for future modals |                            |
 
-**Current State**: `keyboardShortcuts` array defined in `useKeyboard.ts`; `?` handler stubbed but does nothing.
+**Implementation**:
+- `KeyboardHelpModal.vue` component with Teleport, grid layout, transitions
+- Module-level `isHelpModalOpen` state in `useKeyboard.ts`
+- `?` key toggles modal; Esc and click-outside close it
+- Added `?` hint to keyboard hints bar for discoverability
 
-**Implementation Approach**:
-
-1. Create `KeyboardHelpModal.vue` with grid of shortcuts
-2. Wire `?` key to toggle modal visibility
-3. Use same modal pattern for future features (search, settings)
-4. Add subtle "Press ? for shortcuts" hint in keyboard hints bar
-
-**Success Criteria**:
-
-- Pressing `?` toggles modal visibility
-- Modal shows all shortcuts in scannable grid
-- Pressing `Esc` or clicking outside closes modal
+**Success Criteria**: All met
+- [x] Pressing `?` toggles modal visibility
+- [x] Modal shows all shortcuts in scannable grid
+- [x] Pressing `Esc` or clicking outside closes modal
 
 ---
 

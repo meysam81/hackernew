@@ -2,6 +2,7 @@
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import HeaderActions from '../components/ui/HeaderActions.vue';
+import KeyboardHelpModal from '../components/ui/KeyboardHelpModal.vue';
 import '../styles/global.css';
 
 export interface Props {
@@ -65,6 +66,8 @@ const basePath = import.meta.env.BASE_URL || '/';
       </main>
 
       <Footer />
+
+      <KeyboardHelpModal client:load />
     </div>
 
     <script defer src="https://analytics.hackernew.dev/pa.js"

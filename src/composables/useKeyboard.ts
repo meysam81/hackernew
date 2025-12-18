@@ -1,6 +1,17 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import log from "@/utils/logger";
 
+// Module-level shared state for help modal
+export const isHelpModalOpen = ref(false);
+
+export function toggleHelpModal(): void {
+  isHelpModalOpen.value = !isHelpModalOpen.value;
+}
+
+export function closeHelpModal(): void {
+  isHelpModalOpen.value = false;
+}
+
 interface KeyboardOptions {
   onNavigate?: (direction: "up" | "down") => void;
   onOpen?: () => void;
@@ -37,6 +48,11 @@ export function useKeyboard(options: KeyboardOptions = {}) {
       return;
     }
 
+    // When help modal is open, only allow ? to toggle it closed
+    if (isHelpModalOpen.value && event.key !== "?") {
+      return;
+    }
+
     switch (event.key.toLowerCase()) {
       case "j":
         event.preventDefault();
@@ -70,7 +86,8 @@ export function useKeyboard(options: KeyboardOptions = {}) {
         onBack?.();
         break;
       case "?":
-        // Show keyboard shortcuts help (could emit event)
+        event.preventDefault();
+        toggleHelpModal();
         break;
       default:
         log.debug(`Unhandled key: ${event.key}`);
