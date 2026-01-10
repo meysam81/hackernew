@@ -1,33 +1,8 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import { X, CheckCircle, AlertCircle, Info } from "lucide-vue-next";
+import { useToast } from "@/composables/useToast";
 
-interface Toast {
-  id: string;
-  type: "success" | "error" | "info";
-  message: string;
-}
-
-const toasts = ref<Toast[]>([]);
-
-const addToast = (type: Toast["type"], message: string, duration = 3000) => {
-  const id = Math.random().toString(36).substring(2, 9);
-  toasts.value.push({ id, type, message });
-
-  setTimeout(() => {
-    removeToast(id);
-  }, duration);
-};
-
-const removeToast = (id: string) => {
-  const index = toasts.value.findIndex((t) => t.id === id);
-  if (index > -1) {
-    toasts.value.splice(index, 1);
-  }
-};
-
-// Expose methods for external use
-defineExpose({ addToast, removeToast });
+const { toasts, removeToast } = useToast();
 
 const icons = {
   success: CheckCircle,
@@ -145,5 +120,17 @@ const icons = {
 .toast-leave-to {
   opacity: 0;
   transform: translateX(100%);
+}
+
+@media (max-width: 480px) {
+  .toast-container {
+    left: var(--spacing-4);
+    right: var(--spacing-4);
+    bottom: var(--spacing-4);
+  }
+
+  .toast {
+    max-width: none;
+  }
 }
 </style>
