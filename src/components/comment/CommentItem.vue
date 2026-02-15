@@ -137,7 +137,7 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
         <button
           v-if="totalReplyCount > 0"
           class="collapse-btn"
-          :aria-expanded="!collapsed"
+          :aria-expanded="collapsed ? 'false' : 'true'"
           :aria-label="
             collapsed
               ? `Expand ${displayReplyCount} replies`

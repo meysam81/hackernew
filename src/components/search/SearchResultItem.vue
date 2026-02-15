@@ -19,7 +19,11 @@ const isComment = computed(() => props.hit._tags.includes("comment"));
 const isStory = computed(() => props.hit._tags.includes("story"));
 
 const sanitizeHighlight = (html: string): string => {
-  return html.replace(/<(?!\/?em\b)[^>]*>/g, "").trim();
+  // Strip all tags except <em> and </em>, then strip attributes from <em>
+  return html
+    .replace(/<(?!\/?em\b)[^>]*>/g, "")
+    .replace(/<em[^>]*>/g, "<em>")
+    .trim();
 };
 
 const title = computed(() => {

@@ -83,6 +83,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown, true);
+  document.body.style.overflow = "";
 });
 
 defineExpose({ open, close });
@@ -137,11 +138,10 @@ defineExpose({ open, close });
 </template>
 
 <style scoped>
-/* Z-index scale: header=50, install-prompt=55, keyboard-help=60, search=70, skip-link=100, toast=100 */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: var(--z-keyboard-help);
   display: flex;
   align-items: center;
   justify-content: center;

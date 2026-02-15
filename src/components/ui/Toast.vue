@@ -66,7 +66,7 @@ const icons = {
   position: fixed;
   bottom: var(--spacing-4);
   right: var(--spacing-4);
-  z-index: 100;
+  z-index: var(--z-toast);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);

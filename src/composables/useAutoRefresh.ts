@@ -13,6 +13,10 @@ let currentIds: number[] = [];
 
 const POLL_INTERVAL = 60_000; // 60 seconds
 
+if (typeof document !== "undefined") {
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+}
+
 async function fetchFreshIds(feedType: string): Promise<number[]> {
   try {
     return await getStoryIds(feedType as FeedType, true);
@@ -83,8 +87,6 @@ export function useAutoRefresh() {
     }
 
     startPollingInternal();
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
   };
 
   const stopPolling = () => {
@@ -92,7 +94,6 @@ export function useAutoRefresh() {
       clearInterval(pollTimer);
       pollTimer = null;
     }
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
   };
 
   const consumeNewStories = (): number[] => {

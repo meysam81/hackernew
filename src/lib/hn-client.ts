@@ -97,9 +97,7 @@ export async function getStoryIds(
 
   const ids = await hnApi.get(endpoint).json<number[]>();
 
-  if (!forceFresh) {
-    setCache(cacheKey, ids);
-  }
+  setCache(cacheKey, ids);
 
   return ids;
 }

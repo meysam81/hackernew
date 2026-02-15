@@ -87,8 +87,9 @@ const handleKeyDown = (event: KeyboardEvent) => {
       if (selectedIndex.value >= 0 && results.value[selectedIndex.value]) {
         event.preventDefault();
         navigateToResult(selectedIndex.value);
-      } else {
-        commitSearch();
+      } else if (results.value.length > 0) {
+        event.preventDefault();
+        navigateToResult(0);
       }
       break;
   }
@@ -269,7 +270,13 @@ onUnmounted(() => {
             <!-- Results list -->
             <template v-else>
               <div v-if="results.length > 0" class="results-count">
-                Showing {{ results.length }} results
+                Showing {{ results.length
+                }}{{
+                  totalHits > results.length
+                    ? ` of ${totalHits.toLocaleString()}`
+                    : ""
+                }}
+                results
               </div>
               <SearchResultItem
                 v-for="(hit, index) in results"
@@ -300,7 +307,7 @@ onUnmounted(() => {
 .search-overlay {
   position: fixed;
   inset: 0;
-  z-index: 70;
+  z-index: var(--z-search);
   display: flex;
   align-items: flex-start;
   justify-content: center;

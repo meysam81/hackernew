@@ -16,6 +16,7 @@
   --color-accent: #f97316;
   --color-accent-hover: #ea580c;
   --color-accent-muted: #fed7aa;
+  --color-text-on-accent: #ffffff;
 
   /* Spacing - 4px base */
   --spacing-1: 4px;
@@ -53,6 +54,14 @@
   /* Transitions */
   --transition-fast: 150ms ease-out;
   --transition-normal: 200ms ease-out;
+
+  /* Z-index scale */
+  --z-header: 50;
+  --z-install-prompt: 55;
+  --z-keyboard-help: 60;
+  --z-search: 70;
+  --z-skip-link: 100;
+  --z-toast: 100;
 }
 
 /* Base styles */
@@ -201,7 +210,7 @@ body {
 .skip-link {
   position: absolute;
   left: -9999px;
-  z-index: 100;
+  z-index: var(--z-skip-link);
   padding: 8px 16px;
   background: var(--accent);
   color: #fff;

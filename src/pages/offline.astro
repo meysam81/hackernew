@@ -19,7 +19,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <p class="offline-description">
       Check your internet connection and try again. Your bookmarked stories are still available locally.
     </p>
-    <button onclick="window.location.href='/';window.location.reload();" class="offline-btn">Try again</button>
+    <a href="/" class="offline-btn">Try again</a>
   </div>
 </BaseLayout>
 
@@ -62,8 +62,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: #fff;
     background-color: var(--accent);
     border-radius: var(--radius-sm);
-    border: none;
-    cursor: pointer;
+    text-decoration: none;
     transition: background-color var(--transition-fast);
   }
 

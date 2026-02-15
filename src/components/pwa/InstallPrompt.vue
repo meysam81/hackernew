@@ -4,6 +4,7 @@ import { Download, X } from "lucide-vue-next";
 import { getLocalStorage, setLocalStorage } from "@/lib/utils";
 
 const DISMISSED_KEY = "hackernew-pwa-dismissed";
+const REPROMPT_DELAY_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const showPrompt = ref(false);
 const deferredPrompt = shallowRef<BeforeInstallPromptEvent | null>(null);
@@ -34,7 +35,7 @@ const install = async () => {
 
 onMounted(() => {
   const dismissedAt = getLocalStorage(DISMISSED_KEY, 0);
-  if (dismissedAt && Date.now() - dismissedAt < 30 * 24 * 60 * 60 * 1000) {
+  if (dismissedAt && Date.now() - dismissedAt < REPROMPT_DELAY_MS) {
     return;
   }
 
@@ -89,7 +90,7 @@ onMounted(() => {
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  z-index: 55;
+  z-index: var(--z-install-prompt);
 }
 
 .prompt-content {

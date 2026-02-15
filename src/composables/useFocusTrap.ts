@@ -49,7 +49,7 @@ export function useFocusTrap(container: Ref<HTMLElement | null>) {
     }
     active = true;
     previouslyFocused = document.activeElement as HTMLElement;
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown, true);
 
     // Focus first focusable element
     requestAnimationFrame(() => {
@@ -65,7 +65,7 @@ export function useFocusTrap(container: Ref<HTMLElement | null>) {
       return;
     }
     active = false;
-    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("keydown", handleKeyDown, true);
 
     if (previouslyFocused && previouslyFocused.focus) {
       previouslyFocused.focus();

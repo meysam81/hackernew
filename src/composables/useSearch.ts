@@ -39,8 +39,14 @@ export function useSearch() {
 
   const closeSearch = () => {
     isOpen.value = false;
-    // Reset state on next tick to avoid Vue patching children of a removed Teleport container
-    // (causes "Cannot read properties of null (reading 'insertBefore')")
+    // Clear pending debounced search
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+      debounceTimer = null;
+    }
+    // Invalidate any in-flight requests
+    requestId++;
+    // Reset state on next tick to avoid Teleport insertBefore error
     nextTick(() => {
       query.value = "";
       results.value = [];

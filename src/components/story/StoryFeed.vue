@@ -247,7 +247,7 @@ watch(
 
 .new-stories-badge:hover {
   background-color: var(--accent);
-  color: var(--bg-primary);
+  color: var(--color-text-on-accent);
 }
 
 .story-list {
