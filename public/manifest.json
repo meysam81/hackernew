@@ -1,0 +1,40 @@
+{
+  "background_color": "#fafafa",
+  "description": "A modern reimagining of Hacker News",
+  "display": "standalone",
+  "icons": [
+    {
+      "sizes": "48x48",
+      "src": "/favicon-48x48.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "128x128",
+      "src": "/favicon-128x128.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "256x256",
+      "src": "/favicon-256x256.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "256x256",
+      "src": "/favicon-256x256.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "any",
+      "src": "/favicon.svg",
+      "type": "image/svg+xml"
+    }
+  ],
+  "id": "/",
+  "name": "HackerNew",
+  "scope": "/",
+  "short_name": "HackerNew",
+  "start_url": "/",
+  "theme_color": "#F97316"
+}

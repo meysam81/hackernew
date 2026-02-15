@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { ChevronDown, ChevronRight, MessageSquare, Loader2 } from "lucide-vue-next";
+import {
+  ChevronDown,
+  ChevronRight,
+  MessageSquare,
+  Loader2,
+} from "lucide-vue-next";
 import type { LazyComment } from "@/lib/hn-client";
 import { getMoreReplies, REPLY_BATCH_SIZE } from "@/lib/hn-client";
 import { timeAgo, formatDate, sanitizeHtml } from "@/lib/utils";
@@ -54,7 +59,9 @@ function countAllReplies(replies: LazyComment[]): number {
 }
 
 // Memoized nested loaded reply count
-const nestedLoadedReplyCount = computed(() => countAllReplies(localReplies.value));
+const nestedLoadedReplyCount = computed(() =>
+  countAllReplies(localReplies.value),
+);
 
 const displayReplyCount = computed(() => {
   // When collapsed, show total potential replies
@@ -71,7 +78,9 @@ const toggleCollapse = () => {
 
 // Load more replies for this comment
 const loadMoreReplies = async () => {
-  if (loadingReplies.value) return;
+  if (loadingReplies.value) {
+    return;
+  }
 
   try {
     loadingReplies.value = true;
@@ -79,7 +88,7 @@ const loadMoreReplies = async () => {
     const result = await getMoreReplies(
       props.comment.replyIds,
       loadedReplyCount.value,
-      REPLY_BATCH_SIZE
+      REPLY_BATCH_SIZE,
     );
 
     localReplies.value = [...localReplies.value, ...result.replies];
@@ -88,7 +97,6 @@ const loadMoreReplies = async () => {
       repliesLoaded.value = true;
     }
   } catch (err) {
-    console.error("Failed to load replies:", err);
   } finally {
     loadingReplies.value = false;
   }
@@ -129,6 +137,12 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
         <button
           v-if="totalReplyCount > 0"
           class="collapse-btn"
+          :aria-expanded="!collapsed"
+          :aria-label="
+            collapsed
+              ? `Expand ${displayReplyCount} replies`
+              : 'Collapse replies'
+          "
           @click="toggleCollapse"
         >
           {{ collapsed ? `[+${displayReplyCount}]` : "[-]" }}
@@ -139,7 +153,8 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
 
       <div v-if="collapsed" class="comment-collapsed-summary">
         <MessageSquare :size="12" />
-        {{ displayReplyCount }} {{ displayReplyCount === 1 ? "reply" : "replies" }} hidden
+        {{ displayReplyCount }}
+        {{ displayReplyCount === 1 ? "reply" : "replies" }} hidden
       </div>
 
       <!-- Nested replies -->
@@ -170,7 +185,10 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
         >
           Load {{ Math.min(remainingReplies, REPLY_BATCH_SIZE) }} more
           {{ remainingReplies === 1 ? "reply" : "replies" }}
-          <span v-if="remainingReplies > REPLY_BATCH_SIZE" class="remaining-hint">
+          <span
+            v-if="remainingReplies > REPLY_BATCH_SIZE"
+            class="remaining-hint"
+          >
             ({{ remainingReplies }} total)
           </span>
         </button>
@@ -396,7 +414,18 @@ const onChildRepliesUpdate = (childId: number, newReplies: LazyComment[]) => {
   color: var(--text-tertiary);
 }
 
+.spin {
+  animation: spin 1s linear infinite;
+}
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Respect user preference for reduced motion */
 @media (prefers-reduced-motion: reduce) {

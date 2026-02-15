@@ -81,17 +81,25 @@ function setCache<T>(key: string, data: T): void {
 }
 
 // API Functions
-export async function getStoryIds(type: FeedType): Promise<number[]> {
+export async function getStoryIds(
+  type: FeedType,
+  forceFresh?: boolean,
+): Promise<number[]> {
   const endpoint = `${type}stories.json`;
   const cacheKey = `ids:${type}`;
 
-  const cached = getCached<number[]>(cacheKey);
-  if (cached) {
-    return cached;
+  if (!forceFresh) {
+    const cached = getCached<number[]>(cacheKey);
+    if (cached) {
+      return cached;
+    }
   }
 
   const ids = await hnApi.get(endpoint).json<number[]>();
-  setCache(cacheKey, ids);
+
+  if (!forceFresh) {
+    setCache(cacheKey, ids);
+  }
 
   return ids;
 }

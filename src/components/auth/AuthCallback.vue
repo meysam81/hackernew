@@ -41,9 +41,6 @@ onMounted(async () => {
             data.session.user.email?.split("@")[0] ||
             null,
         });
-
-        if (profileError) {
-        }
       }
 
       // Redirect to home after a short delay

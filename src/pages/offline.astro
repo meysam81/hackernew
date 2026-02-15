@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Offline | HackerNew" description="You are currently offline.">
+  <div class="offline-page">
+    <div class="offline-icon">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+    </div>
+    <h1 class="offline-title">You're offline</h1>
+    <p class="offline-description">
+      Check your internet connection and try again. Your bookmarked stories are still available locally.
+    </p>
+    <button onclick="window.location.href='/';window.location.reload();" class="offline-btn">Try again</button>
+  </div>
+</BaseLayout>
+
+<style>
+  .offline-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-16) var(--spacing-4);
+    min-height: 50vh;
+  }
+
+  .offline-icon {
+    color: var(--text-tertiary);
+    margin-bottom: var(--spacing-6);
+  }
+
+  .offline-title {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-2);
+  }
+
+  .offline-description {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin: 0 0 var(--spacing-6);
+    max-width: 400px;
+  }
+
+  .offline-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-6);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: #fff;
+    background-color: var(--accent);
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .offline-btn:hover {
+    background-color: var(--accent-hover);
+  }
+</style>

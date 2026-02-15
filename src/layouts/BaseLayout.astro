@@ -2,6 +2,9 @@
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import HeaderActions from '../components/ui/HeaderActions.vue';
+import KeyboardHelpModal from '../components/ui/KeyboardHelpModal.vue';
+import SearchModal from '../components/search/SearchModal.vue';
+import InstallPrompt from '../components/pwa/InstallPrompt.vue';
 import '../styles/global.css';
 
 export interface Props {
@@ -33,12 +36,33 @@ const basePath = import.meta.env.BASE_URL || '/';
     <meta name="twitter:description" content={description} />
 
     <link rel="icon" type="image/svg+xml" href={`${basePath}favicon.svg`} />
+    <link rel="manifest" href={`${basePath}manifest.json`} />
     <link rel="canonical" href={Astro.url.href} />
+    <link rel="alternate" type="application/rss+xml" title="HackerNew - Top Stories" href={`${basePath}rss.xml`} />
+    <link rel="apple-touch-icon" href={`${basePath}favicon-256x256.png`} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
 
     <link rel="dns-prefetch" href="https://analytics.hackernew.dev" />
     <link rel="preconnect" href="https://analytics.hackernew.dev" crossorigin />
 
     <title>{title}</title>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "HackerNew",
+      "url": "https://hackernew.dev",
+      "description": "A modern reimagining of Hacker News with dark mode, keyboard navigation, bookmarks, and more.",
+      "applicationCategory": "NewsApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires a modern web browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    })} />
 
     <!-- Prevent flash of wrong theme -->
     <script is:inline>
@@ -53,19 +77,38 @@ const basePath = import.meta.env.BASE_URL || '/';
         document.documentElement.classList.add(`density-${densityValue}`);
       })();
     </script>
+
+    <!-- Capture beforeinstallprompt before Vue hydrates -->
+    <script is:inline>
+      window.__pwaInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        window.__pwaInstallPrompt = e;
+      });
+    </script>
+
+    <!-- Register PWA service worker -->
+    <script src="../lib/pwa.ts"></script>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div id="announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
     <div class="app-shell">
       <Header>
         <HeaderActions slot="actions" client:load />
       </Header>
 
-      <main class="main-content">
+      <main id="main-content" class="main-content">
         <slot />
       </main>
 
       <Footer />
     </div>
+
+    <KeyboardHelpModal client:idle />
+    <SearchModal client:load />
+    <InstallPrompt client:idle />
 
     <script defer src="https://analytics.hackernew.dev/pa.js"
     id="pianjs"

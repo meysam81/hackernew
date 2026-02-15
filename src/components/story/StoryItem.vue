@@ -97,10 +97,7 @@ const handleBookmarkClick = async (e: Event) => {
         <span class="meta-sep">·</span>
         <span class="story-time" :title="formattedDate">{{ timeAgoStr }}</span>
         <span class="meta-sep">·</span>
-        <a
-          :href="`${basePath}item/${story.id}`"
-          class="story-comments"
-        >
+        <a :href="`${basePath}item/${story.id}`" class="story-comments">
           <MessageSquare :size="12" />
           {{ pluralize(commentCount, "comment") }}
         </a>

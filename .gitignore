@@ -32,3 +32,5 @@ pnpm-debug.log*
 *.tsbuildinfo
 ignore
 .secrets/
+.claude
+docs/plans

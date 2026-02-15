@@ -4,6 +4,8 @@ import type { HNStory, FeedType } from "@/lib/hn-client";
 import { getStories } from "@/lib/hn-client";
 import { useKeyboard } from "@/composables/useKeyboard";
 import { useBookmarks } from "@/composables/useBookmarks";
+import { useAnnouncer } from "@/composables/useAnnouncer";
+import { useAutoRefresh } from "@/composables/useAutoRefresh";
 import StoryItem from "./StoryItem.vue";
 import StoryListSkeleton from "./StoryListSkeleton.vue";
 
@@ -27,6 +29,8 @@ const selectedIndex = ref(0);
 const basePath = import.meta.env.BASE_URL || "/";
 
 const { toggleBookmark } = useBookmarks();
+const { announce } = useAnnouncer();
+const { newStoryCount, startPolling, consumeNewStories } = useAutoRefresh();
 
 const fetchStories = async (page: number = 0) => {
   try {
@@ -48,6 +52,10 @@ const fetchStories = async (page: number = 0) => {
 
     hasMore.value = newStories.length === props.pageSize;
     currentPage.value = page;
+
+    if (page === 0) {
+      announce(`${stories.value.length} stories loaded`);
+    }
   } catch (err) {
     error.value = "Failed to load stories. Please try again.";
   } finally {
@@ -64,6 +72,17 @@ const loadMore = () => {
 
 const refresh = () => {
   fetchStories(0);
+};
+
+const loadNewStories = async () => {
+  const ids = consumeNewStories();
+  if (ids.length === 0) {
+    return;
+  }
+
+  // Refresh the entire feed to get the latest order
+  await fetchStories(0);
+  announce(`${ids.length} new stories loaded`);
 };
 
 const selectedStory = computed(
@@ -120,16 +139,24 @@ useKeyboard({
   onBookmark: bookmarkSelected,
 });
 
-onMounted(() => {
-  fetchStories(0);
+onMounted(async () => {
+  await fetchStories(0);
+  startPolling(
+    props.feedType,
+    stories.value.map((s) => s.id),
+  );
 });
 
 // Watch for feed type changes
 watch(
   () => props.feedType,
-  () => {
+  async () => {
     selectedIndex.value = 0;
-    fetchStories(0);
+    await fetchStories(0);
+    startPolling(
+      props.feedType,
+      stories.value.map((s) => s.id),
+    );
   },
 );
 </script>
@@ -152,18 +179,28 @@ watch(
 
     <!-- Story list -->
     <template v-else>
-      <div class="story-list">
+      <!-- New stories badge -->
+      <button
+        v-if="newStoryCount > 0"
+        class="new-stories-badge"
+        @click="loadNewStories"
+      >
+        {{ newStoryCount }} new {{ newStoryCount === 1 ? "story" : "stories" }}
+      </button>
+
+      <div
+        class="story-list"
+        role="feed"
+        aria-label="Stories"
+        :aria-busy="loading"
+      >
         <div
           v-for="(story, index) in stories"
           :key="story.id"
           :data-story-index="index"
           :class="{ 'story-selected': index === selectedIndex }"
         >
-          <StoryItem
-            :story="story"
-            :rank="index + 1"
-            @click="() => {}"
-          />
+          <StoryItem :story="story" :rank="index + 1" @click="() => {}" />
         </div>
       </div>
 
@@ -188,6 +225,29 @@ watch(
 <style scoped>
 .story-feed {
   position: relative;
+}
+
+.new-stories-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-4);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--accent);
+  background-color: var(--accent-muted);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+.new-stories-badge:hover {
+  background-color: var(--accent);
+  color: var(--bg-primary);
 }
 
 .story-list {

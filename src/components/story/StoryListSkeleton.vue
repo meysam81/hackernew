@@ -21,7 +21,7 @@ withDefaults(defineProps<Props>(), {
       </div>
       <div class="skeleton-content">
         <div class="skeleton-title">
-          <Skeleton :width="`${60 + Math.random() * 30}%`" height="18px" />
+          <Skeleton :width="`${60 + ((i * 17 + 7) % 30)}%`" height="18px" />
         </div>
         <div class="skeleton-meta">
           <Skeleton width="60px" height="14px" />

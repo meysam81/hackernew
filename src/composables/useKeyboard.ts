@@ -69,9 +69,6 @@ export function useKeyboard(options: KeyboardOptions = {}) {
         event.preventDefault();
         onBack?.();
         break;
-      case "?":
-        // Show keyboard shortcuts help (could emit event)
-        break;
       default:
         log.debug(`Unhandled key: ${event.key}`);
         break;
@@ -101,13 +98,22 @@ export function useKeyboard(options: KeyboardOptions = {}) {
   };
 }
 
+export type ShortcutCategory = "navigation" | "actions" | "general";
+
+export interface KeyboardShortcut {
+  key: string;
+  description: string;
+  category: ShortcutCategory;
+}
+
 // Keyboard shortcuts help
-export const keyboardShortcuts = [
-  { key: "j", description: "Next story" },
-  { key: "k", description: "Previous story" },
-  { key: "o", description: "Open story link" },
-  { key: "c", description: "Open comments" },
-  { key: "b", description: "Toggle bookmark" },
-  { key: "Esc", description: "Go back" },
-  { key: "?", description: "Show shortcuts" },
+export const keyboardShortcuts: KeyboardShortcut[] = [
+  { key: "j", description: "Next story", category: "navigation" },
+  { key: "k", description: "Previous story", category: "navigation" },
+  { key: "o / Enter", description: "Open story link", category: "actions" },
+  { key: "c", description: "Open comments", category: "actions" },
+  { key: "b", description: "Toggle bookmark", category: "actions" },
+  { key: "Esc", description: "Go back", category: "general" },
+  { key: "?", description: "Show shortcuts", category: "general" },
+  { key: "\u2318K / Ctrl+K", description: "Search", category: "general" },
 ];

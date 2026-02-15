@@ -37,7 +37,11 @@ const fetchInitialComments = async () => {
     loading.value = true;
     error.value = null;
 
-    const result = await getCommentBatch(props.commentIds, 0, COMMENT_BATCH_SIZE);
+    const result = await getCommentBatch(
+      props.commentIds,
+      0,
+      COMMENT_BATCH_SIZE,
+    );
     comments.value = result.comments;
     hasMore.value = result.hasMore;
     totalComments.value = result.total;
@@ -50,7 +54,9 @@ const fetchInitialComments = async () => {
 };
 
 const loadMoreComments = async () => {
-  if (loadingMore.value || !hasMore.value) return;
+  if (loadingMore.value || !hasMore.value) {
+    return;
+  }
 
   try {
     loadingMore.value = true;
@@ -58,7 +64,7 @@ const loadMoreComments = async () => {
     const result = await getCommentBatch(
       props.commentIds,
       loadedOffset.value,
-      COMMENT_BATCH_SIZE
+      COMMENT_BATCH_SIZE,
     );
 
     comments.value = [...comments.value, ...result.comments];
@@ -66,7 +72,6 @@ const loadMoreComments = async () => {
     loadedOffset.value += result.comments.length;
   } catch (err) {
     // Silently fail on load more - user can retry
-    console.error("Failed to load more comments:", err);
   } finally {
     loadingMore.value = false;
   }
@@ -74,7 +79,9 @@ const loadMoreComments = async () => {
 
 // Setup intersection observer for auto-loading more comments
 const setupIntersectionObserver = () => {
-  if (!loadMoreTrigger.value) return;
+  if (!loadMoreTrigger.value) {
+    return;
+  }
 
   observer = new IntersectionObserver(
     (entries) => {
@@ -86,7 +93,7 @@ const setupIntersectionObserver = () => {
     {
       rootMargin: "200px", // Load more when within 200px of the trigger
       threshold: 0,
-    }
+    },
   );
 
   observer.observe(loadMoreTrigger.value);
@@ -129,7 +136,14 @@ const onTriggerRef = (el: HTMLElement | null) => {
     </div>
 
     <!-- Loading -->
-    <CommentSkeleton v-if="loading" :count="5" />
+    <div
+      v-if="loading"
+      role="status"
+      aria-label="Loading comments"
+      aria-busy="true"
+    >
+      <CommentSkeleton :count="5" />
+    </div>
 
     <!-- Error -->
     <div v-else-if="error" class="thread-error">
@@ -152,11 +166,7 @@ const onTriggerRef = (el: HTMLElement | null) => {
       />
 
       <!-- Load more trigger (for intersection observer) -->
-      <div
-        v-if="hasMore"
-        :ref="onTriggerRef"
-        class="load-more-trigger"
-      >
+      <div v-if="hasMore" :ref="onTriggerRef" class="load-more-trigger">
         <button
           v-if="!loadingMore"
           class="load-more-btn"
@@ -272,11 +282,11 @@ const onTriggerRef = (el: HTMLElement | null) => {
   to {
     transform: rotate(360deg);
   }
-  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .spin {
-  animation: none !important;
+    animation: none !important;
   }
 }
 

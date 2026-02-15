@@ -1,13 +1,20 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { useTheme } from "@/composables/useTheme";
 import { useDensity } from "@/composables/useDensity";
 import { useAuth } from "@/composables/useAuth";
-import { Sun, Moon, Rows3, Rows4, User, LogOut } from "lucide-vue-next";
+import { useSearch } from "@/composables/useSearch";
+import { Search, Sun, Moon, Rows3, Rows4, User, LogOut } from "lucide-vue-next";
 
 const { resolvedTheme, toggleTheme } = useTheme();
 const { density, toggleDensity } = useDensity();
 const { user, loading, signOut, isConfigured } = useAuth();
+const { openSearch } = useSearch();
 
+const isMac = ref(false);
+onMounted(() => {
+  isMac.value = /Mac|iPod|iPhone|iPad/.test(navigator.platform ?? "");
+});
 const basePath = import.meta.env.BASE_URL || "/";
 
 const handleSignOut = async () => {
@@ -18,6 +25,16 @@ const handleSignOut = async () => {
 
 <template>
   <div class="header-actions">
+    <!-- Search -->
+    <button
+      class="icon-btn"
+      :title="`Search (${isMac ? '⌘' : 'Ctrl+'}K)`"
+      :aria-label="`Search (${isMac ? '⌘' : 'Ctrl+'}K)`"
+      @click="openSearch"
+    >
+      <Search :size="18" />
+    </button>
+
     <!-- Density Toggle -->
     <button
       class="icon-btn"

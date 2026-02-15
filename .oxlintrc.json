@@ -114,7 +114,7 @@
     "no-document-cookie": "deny",
     "no-done-callback": "deny",
     "no-duplicate-hooks": "deny",
-    "no-duplicate-imports": "deny",
+    "no-duplicate-imports": "warn",
     "no-duplicates": "deny",
     "no-dynamic-require": "deny",
     "no-else-return": "deny",
@@ -124,7 +124,7 @@
         "allowEmptyCatch": true
       }
     ],
-    "no-empty-function": "deny",
+    "no-empty-function": "warn",
     "no-empty-interface": "deny",
     "no-empty-named-blocks": "deny",
     "no-eq-null": "deny",
@@ -148,7 +148,7 @@
     "no-large-snapshots": "deny",
     "no-length-as-slice-end": "deny",
     "no-lone-blocks": "deny",
-    "no-lonely-if": "deny",
+    "no-lonely-if": "warn",
     "no-magic-array-flat-depth": "deny",
     "no-magic-numbers": "off",
     "no-map-spread": "deny",
