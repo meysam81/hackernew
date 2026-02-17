@@ -23,7 +23,7 @@ export default defineConfig({
       manifest: false, // Using public/manifest.json
       workbox: {
         navigateFallback: "/offline",
-        navigateFallbackDenylist: [/^\/rss\.xml$/, /^\/sitemap/],
+        navigateFallbackDenylist: [/^\/rss\.xml$/, /^\/sitemap/, /^\/item\//, /^\/user\//],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.(js|css|woff2?)$/,
