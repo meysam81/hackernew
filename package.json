@@ -17,7 +17,7 @@
     "lucide-vue-next": "^0.460.0",
     "sharp": "^0.33.2",
     "tailwindcss": "^4.0.0-beta.8",
-    "typescript": "^5.7.2",
+    "typescript": "^6.0.0",
     "vue": "^3.5.13"
   },
   "description": "A modern reimagining of Hacker News",
