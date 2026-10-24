@@ -14,7 +14,7 @@
     "astro": "^4.16.18",
     "ky": "^1.7.2",
     "loglevel": "^1.9.2",
-    "lucide-vue-next": "^0.460.0",
+    "lucide-vue-next": "^0.577.0",
     "sharp": "^0.33.2",
     "tailwindcss": "^4.0.0-beta.8",
     "typescript": "^5.7.2",
