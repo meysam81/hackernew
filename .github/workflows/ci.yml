@@ -35,7 +35,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
-          bun-version: latest
+          bun-version-file: .bun-version
       - name: Install dependencies
         run: bun install
       - name: Build
@@ -52,7 +52,7 @@ jobs:
       - name: Deploy to Netlify
         id: netlify
         run: |
-          bunx netlify-cli@v23 deploy \
+          bunx "netlify-cli@${NETLIFY_CLI_VERSION}" deploy \
             --site "$NETLIFY_SITE_ID" \
             --no-build \
             --json \
@@ -62,6 +62,8 @@ jobs:
           deploy_url="$(cat deploy_url.txt)"
           echo "deploy_url=$deploy_url" >> "$GITHUB_OUTPUT"
         env:
+          # renovate: npm=netlify-cli
+          NETLIFY_CLI_VERSION: 23.15.1
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
       - name: Comment PR
@@ -93,7 +95,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
-          bun-version: latest
+          bun-version-file: .bun-version
       - name: Install dependencies
         run: bun install
       - name: Build
